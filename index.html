@@ -104,7 +104,7 @@ main { flex: 1; padding: 16px; max-width: 720px; margin: 0 auto; width: 100%; }
 .compass .needle { width: 4px; height: 90px; position: absolute; top: 20px; left: 50%; transform-origin: bottom center; transform: translateX(-50%); transition: 0.5s; background: linear-gradient(to bottom, var(--gold), var(--emerald)); border-radius: 4px; }
 .compass .center-dot { width: 14px; height: 14px; border-radius: 50%; background: var(--emerald); z-index: 2; }
 
-.toast { position: fixed; bottom: 100px; left: 50%; transform: translate(-50%, 20px); background: var(--emerald); color: white; padding: 12px 24px; border-radius: 20px; font-weight: 600; font-size: 14px; opacity: 0; transition: 0.3s; z-index: 300; pointer-events: none; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+.toast { position: fixed; bottom: 100px; left: 50%; transform: translate(-50%, 20px); background: var(--emerald); color: white; padding: 12px 24px; border-radius: 20px; font-weight: 600; font-size: 14px; opacity: 0; transition: 0.3s; z-index: 300; pointer-events: none; box-shadow: 0 10px 25px rgba(0,0,0,0.3); text-align: center; max-width: 90%; }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 .toast.error { background: var(--danger); }
 </style>
@@ -365,8 +365,15 @@ main { flex: 1; padding: 16px; max-width: 720px; margin: 0 auto; width: 100%; }
   const messaging = getMessaging(app);
   const VAPID_KEY = "BH6Owo2fsuMMTJ8M8297MuoXagB-NNdUcB6DMe-RGhMbvc79q7T3gl3sGzI6PphaiQij1uveei3-v-JJe81JKdo";
 
+  // 🔥 সার্ভিস ওয়ার্কার রেজিস্ট্রেশন ফিক্স (গিটহাব সাব-ফোল্ডারের জন্য)
+  let swRegistration = null;
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('firebase-messaging-sw.js').catch(err => console.log('SW error:', err));
+    navigator.serviceWorker.register('./firebase-messaging-sw.js')
+      .then(reg => {
+        swRegistration = reg;
+        console.log('Service Worker Registered Successfully');
+      })
+      .catch(err => console.log('SW error:', err));
   }
 
   let currentUser = null;
@@ -623,13 +630,21 @@ main { flex: 1; padding: 16px; max-width: 720px; margin: 0 auto; width: 100%; }
     try {
       const permission = await Notification.requestPermission();
       if (permission === 'granted') {
-        const token = await getToken(messaging, { vapidKey: VAPID_KEY });
+        // ✅ নোটিফিকেশন ফিক্স: সার্ভিস ওয়ার্কার রেজিস্ট্রেশন পাস করা হলো
+        const tokenOptions = { vapidKey: VAPID_KEY };
+        if (swRegistration) tokenOptions.serviceWorkerRegistration = swRegistration;
+        
+        const token = await getToken(messaging, tokenOptions);
+        
         if (token) {
           await updateDoc(doc(db, "users", currentUser.uid), { fcmToken: token });
           toast('নোটিফিকেশন চালু হয়েছে!');
-        } else { toast('টোকেন পাওয়া যায়নি', true); }
-      } else { toast('অনুমতি দেওয়া হয়নি', true); }
-    } catch (err) { toast('নোটিফিকেশন চালু করা যায়নি', true); }
+        } else { toast('টোকেন পাওয়া যায়নি, আবার চেষ্টা করুন', true); }
+      } else { toast('আপনি অনুমতি দেননি', true); }
+    } catch (err) { 
+      toast('Error: ' + err.message, true); 
+      console.error(err); 
+    }
   };
 
   onMessage(messaging, (payload) => { toast(payload.notification.title + ": " + payload.notification.body); });
@@ -637,7 +652,7 @@ main { flex: 1; padding: 16px; max-width: 720px; margin: 0 auto; width: 100%; }
   window.toast = (msg, isError = false) => {
     const el = document.getElementById('toast'); el.textContent = msg;
     el.style.background = isError ? 'var(--danger)' : 'var(--emerald)';
-    el.classList.add('show'); setTimeout(() => el.classList.remove('show'), 2500);
+    el.classList.add('show'); setTimeout(() => el.classList.remove('show'), 3500);
   };
 </script>
 </body>
