@@ -104,6 +104,13 @@ main { flex: 1; padding: 16px; max-width: 720px; margin: 0 auto; width: 100%; }
 .compass .needle { width: 4px; height: 90px; position: absolute; top: 20px; left: 50%; transform-origin: bottom center; transform: translateX(-50%); transition: 0.5s; background: linear-gradient(to bottom, var(--gold), var(--emerald)); border-radius: 4px; }
 .compass .center-dot { width: 14px; height: 14px; border-radius: 50%; background: var(--emerald); z-index: 2; }
 
+.switch { position: relative; width: 46px; height: 26px; flex-shrink: 0; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.switch .slider { position: absolute; inset: 0; border-radius: 26px; background: var(--navy-600); transition: 0.3s; cursor: pointer; }
+.switch .slider::before { content: ''; position: absolute; width: 20px; height: 20px; border-radius: 50%; background: #fff; top: 3px; left: 3px; transition: 0.3s; }
+.switch input:checked + .slider { background: var(--emerald); }
+.switch input:checked + .slider::before { transform: translateX(20px); }
+
 .toast { position: fixed; bottom: 100px; left: 50%; transform: translate(-50%, 20px); background: var(--emerald); color: white; padding: 12px 24px; border-radius: 20px; font-weight: 600; font-size: 14px; opacity: 0; transition: 0.3s; z-index: 300; pointer-events: none; box-shadow: 0 10px 25px rgba(0,0,0,0.3); text-align: center; max-width: 90%; }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 .toast.error { background: var(--danger); }
@@ -268,6 +275,45 @@ main { flex: 1; padding: 16px; max-width: 720px; margin: 0 auto; width: 100%; }
       </div>
 
       <div class="mt-24 list-menu">
+        <!-- পানি পানের রিমাইন্ডার -->
+        <div class="txn-item" style="flex-direction:column; align-items:flex-start; gap:12px; margin-bottom:16px;">
+          <div class="flex" style="width:100%; justify-content:space-between; align-items:center;">
+            <div class="flex" style="gap:12px; align-items:center;">
+              <div class="ic" style="background:rgba(59,130,246,0.15); color:var(--info)">💧</div>
+              <div class="meta"><div class="title">পানি পানের রিমাইন্ডার</div></div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="waterReminderToggle" onchange="toggleWaterReminder()">
+              <span class="slider"></span>
+            </label>
+          </div>
+          
+          <div id="waterSettings" class="hidden" style="width:100%; border-top:1px solid var(--card-border); padding-top:12px; margin-top:4px;">
+            <p style="font-size:11px; color:var(--emerald-light); margin-bottom:10px; line-height:1.4;">
+              💡 <b>বৈজ্ঞানিক নিয়ম:</b> সকাল ৮টা থেকে রাত ১০টা পর্যন্ত প্রতি ২ ঘণ্টা পর পর ১ গ্লাস পানি পান করা স্বাস্থ্যের জন্য সবচেয়ে ভালো।
+            </p>
+            <div class="flex gap-8" style="margin-bottom:8px;">
+              <div style="flex:1;">
+                <label style="font-size:11px; color:var(--text-secondary);">শুরু (ঘণ্টা)</label>
+                <input class="input" type="number" id="waterStart" value="8" min="0" max="23" style="padding:8px 10px; font-size:13px;" />
+              </div>
+              <div style="flex:1;">
+                <label style="font-size:11px; color:var(--text-secondary);">শেষ (ঘণ্টা)</label>
+                <input class="input" type="number" id="waterEnd" value="22" min="0" max="23" style="padding:8px 10px; font-size:13px;" />
+              </div>
+            </div>
+            <div>
+              <label style="font-size:11px; color:var(--text-secondary);">কত ঘণ্টা পর পর নোটিফিকেশন আসবে?</label>
+              <select class="input" id="waterInterval" style="padding:8px 10px; font-size:13px;">
+                <option value="1">প্রতি ১ ঘণ্টা পর</option>
+                <option value="2" selected>প্রতি ২ ঘণ্টা পর (প্রস্তাবিত)</option>
+                <option value="3">প্রতি ৩ ঘণ্টা পর</option>
+              </select>
+            </div>
+            <button onclick="saveWaterSettings()" class="btn btn-primary btn-sm mt-8" style="width:100%;">সেটিংস সেভ করুন</button>
+          </div>
+        </div>
+
         <button class="txn-item" style="width:100%; text-align:left;" onclick="showPage('budget')">
           <div class="ic" style="background:rgba(16,185,129,0.15); color:var(--emerald)">📊</div>
           <div class="meta"><div class="title">বাজেট ও রিপোর্ট</div></div>
@@ -280,7 +326,7 @@ main { flex: 1; padding: 16px; max-width: 720px; margin: 0 auto; width: 100%; }
         </button>
         <button class="txn-item" style="width:100%; text-align:left;" onclick="enableNotifications()" id="notifyBtn">
           <div class="ic" style="background:rgba(251,191,36,0.15); color:var(--gold)">🔔</div>
-          <div class="meta"><div class="title">নোটিফিকেশন চালু করুন</div></div>
+          <div class="meta"><div class="title">পুশ নোটিফিকেশন চালু করুন</div></div>
           <div style="color:var(--text-muted)">›</div>
         </button>
         <button class="txn-item" style="width:100%; text-align:left; border-color:rgba(239,68,68,0.3);" onclick="clearData()">
@@ -368,19 +414,23 @@ main { flex: 1; padding: 16px; max-width: 720px; margin: 0 auto; width: 100%; }
   let swRegistration = null;
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./firebase-messaging-sw.js')
-      .then(reg => {
-        swRegistration = reg;
-        console.log('Service Worker Registered Successfully');
-      })
+      .then(reg => { swRegistration = reg; })
       .catch(err => console.log('SW error:', err));
   }
 
   let currentUser = null;
-  let state = { txns: [], budget: 0, theme: 'dark', tasbih: { count: 0, target: 33 } };
+  
+  // পানি পানের ডিফল্ট সেটিংস (বৈজ্ঞানিক নিয়মে)
+  let state = { 
+    txns: [], budget: 0, theme: 'dark', tasbih: { count: 0, target: 33 },
+    water: { enabled: false, start: 8, end: 22, interval: 2, lastNotified: null }
+  };
+  
   let addType = 'expense', addCat = 'food';
   let catChartInst = null;
   let prayerData = null;
   let prayerTimer = null;
+  let waterTimer = null;
 
   const CATEGORIES = [
     { id: 'food', bn: 'খাবার', icon: '🍽️' }, { id: 'transport', bn: 'যাতায়াত', icon: '🚌' },
@@ -397,6 +447,7 @@ main { flex: 1; padding: 16px; max-width: 720px; margin: 0 auto; width: 100%; }
       document.getElementById('profileEmail').textContent = user.email;
       await loadData();
       fetchPrayerTimes();
+      startWaterTimer();
     } else {
       currentUser = null;
       document.getElementById('authScreen').classList.remove('hidden');
@@ -441,10 +492,20 @@ main { flex: 1; padding: 16px; max-width: 720px; margin: 0 auto; width: 100%; }
       const data = docSnap.data();
       if(data.state) state = { ...state, ...data.state };
       if(!state.tasbih) state.tasbih = { count: 0, target: 33 };
+      if(!state.water) state.water = { enabled: false, start: 8, end: 22, interval: 2, lastNotified: null };
+      
       document.getElementById('profileName').textContent = data.name || 'ব্যবহারকারী';
       document.getElementById('profileAvatar').textContent = (data.name || 'B').charAt(0).toUpperCase();
       document.documentElement.setAttribute('data-theme', state.theme);
       document.getElementById('themeBtn').textContent = state.theme === 'dark' ? '🌙' : '☀️';
+      
+      // পানি পানের সেটিংস আপডেট
+      document.getElementById('waterReminderToggle').checked = state.water.enabled;
+      document.getElementById('waterStart').value = state.water.start;
+      document.getElementById('waterEnd').value = state.water.end;
+      document.getElementById('waterInterval').value = state.water.interval;
+      toggleWaterSettingsUI();
+      
       renderAll();
     }
   }
@@ -463,6 +524,85 @@ main { flex: 1; padding: 16px; max-width: 720px; margin: 0 auto; width: 100%; }
     window.scrollTo(0,0);
   };
 
+  // === পানি পানের রিমাইন্ডার লজিক ===
+  window.toggleWaterReminder = () => {
+    state.water.enabled = document.getElementById('waterReminderToggle').checked;
+    toggleWaterSettingsUI();
+    saveData();
+    if(state.water.enabled) {
+      toast('পানি পানের রিমাইন্ডার চালু হয়েছে');
+      if(Notification.permission !== 'granted') {
+        toast('অনুগ্রহ করে পুশ নোটিফিকেশন চালু করুন', true);
+      }
+      startWaterTimer();
+    } else {
+      toast('পানি পানের রিমাইন্ডার বন্ধ হয়েছে');
+    }
+  };
+
+  function toggleWaterSettingsUI() {
+    const el = document.getElementById('waterSettings');
+    if (state.water.enabled) el.classList.remove('hidden');
+    else el.classList.add('hidden');
+  }
+
+  window.saveWaterSettings = async () => {
+    state.water.start = parseInt(document.getElementById('waterStart').value) || 8;
+    state.water.end = parseInt(document.getElementById('waterEnd').value) || 22;
+    state.water.interval = parseInt(document.getElementById('waterInterval').value) || 2;
+    state.water.lastNotified = null; // রিসেট
+    await saveData();
+    toast('পানি পানের সেটিংস সেভ হয়েছে');
+    startWaterTimer();
+  };
+
+  function startWaterTimer() {
+    if (waterTimer) clearInterval(waterTimer);
+    if (!state.water.enabled) return;
+
+    waterTimer = setInterval(() => {
+      if (!state.water.enabled) return;
+      
+      const now = new Date();
+      const currentHour = now.getHours();
+      
+      // চেক করুন বর্তমান সময় সেট করা সময়ের ভেতরে আছে কিনা
+      if (currentHour >= state.water.start && currentHour <= state.water.end) {
+        // প্রতি ঘণ্টার ০ মিনিটে নোটিফিকেশন দিবে
+        if (now.getMinutes() === 0) {
+          const hourKey = now.toISOString().slice(0, 13); // "2024-05-20T08"
+          
+          // যদি এই ঘণ্টায় আগে না দিয়ে থাকে
+          if (state.water.lastNotified !== hourKey) {
+            // চেক করুন ইন্টারভাল মিলছে কিনা (যেমন: ৮টা থেকে শুরু, ২ ঘণ্টা পর পর)
+            const hoursSinceStart = currentHour - state.water.start;
+            if (hoursSinceStart % state.water.interval === 0) {
+              state.water.lastNotified = hourKey;
+              saveData();
+              showWaterNotification();
+            }
+          }
+        }
+      }
+    }, 60000); // প্রতি ১ মিনিটে চেক করবে
+  }
+
+  function showWaterNotification() {
+    if (swRegistration && Notification.permission === 'granted') {
+      swRegistration.showNotification("পানি পানের সময় হয়েছে 💧", {
+        body: "এখন এক গ্লাস পানি পান করুন। সুস্থ থাকুন!",
+        icon: 'https://cdn-icons-png.flaticon.com/512/2933/2933245.png',
+        vibrate: [200, 100, 200]
+      });
+    } else if (Notification.permission === 'granted') {
+      new Notification("পানি পানের সময় হয়েছে 💧", {
+        body: "এখন এক গ্লাস পানি পান করুন। সুস্থ থাকুন!",
+        icon: 'https://cdn-icons-png.flaticon.com/512/2933/2933245.png'
+      });
+    }
+  }
+
+  // === অন্যান্য লজিক ===
   function renderAll() {
     const today = new Date().toISOString().slice(0, 10);
     const month = today.slice(0, 7);
@@ -589,7 +729,18 @@ main { flex: 1; padding: 16px; max-width: 720px; margin: 0 auto; width: 100%; }
     if (prayerTimer) clearInterval(prayerTimer);
     prayerTimer = setInterval(() => {
       const diff = next.dt - new Date();
-      if (diff <= 0) { clearInterval(prayerTimer); fetchPrayerTimes(); return; }
+      if (diff <= 0) { 
+        clearInterval(prayerTimer); 
+        fetchPrayerTimes(); 
+        
+        if (Notification.permission === 'granted') {
+          new Notification("আজানের সময় হয়েছে", {
+            body: `এখন ${next.b} এর আজান দিবে।`,
+            icon: 'https://cdn-icons-png.flaticon.com/512/2933/2933245.png'
+          });
+        }
+        return; 
+      }
       const h = Math.floor(diff / 3600000), m = Math.floor((diff % 3600000) / 60000), s = Math.floor((diff % 60000) / 1000);
       const str = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
       document.getElementById('nextPrayerCd').textContent = str;
@@ -625,25 +776,21 @@ main { flex: 1; padding: 16px; max-width: 720px; margin: 0 auto; width: 100%; }
     saveData();
   };
 
-  // 🔔 নোটিফিকেশন ফাংশন (ব্রাউজার সাপোর্ট চেক সহ)
   window.enableNotifications = async () => {
     try {
       if (!('Notification' in window)) {
         toast('দুঃখিত! আপনার ব্রাউজারটি নোটিফিকেশন সাপোর্ট করে না। Google Chrome ব্যবহার করুন।', true);
         return;
       }
-
       const permission = await Notification.requestPermission();
       if (permission === 'granted') {
         const tokenOptions = { vapidKey: VAPID_KEY };
         if (swRegistration) tokenOptions.serviceWorkerRegistration = swRegistration;
-        
         const token = await getToken(messaging, tokenOptions);
-        
         if (token) {
           await updateDoc(doc(db, "users", currentUser.uid), { fcmToken: token });
           toast('নোটিফিকেশন চালু হয়েছে!');
-          document.getElementById('notifyBtn').querySelector('.title').textContent = '✅ নোটিফিকেশন চালু আছে';
+          document.getElementById('notifyBtn').querySelector('.title').textContent = '✅ পুশ নোটিফিকেশন চালু আছে';
         } else { 
           toast('টোকেন পাওয়া যায়নি, আবার চেষ্টা করুন', true); 
         }
