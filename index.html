@@ -365,7 +365,6 @@ main { flex: 1; padding: 16px; max-width: 720px; margin: 0 auto; width: 100%; }
   const messaging = getMessaging(app);
   const VAPID_KEY = "BH6Owo2fsuMMTJ8M8297MuoXagB-NNdUcB6DMe-RGhMbvc79q7T3gl3sGzI6PphaiQij1uveei3-v-JJe81JKdo";
 
-  // 🔥 সার্ভিস ওয়ার্কার রেজিস্ট্রেশন ফিক্স (গিটহাব সাব-ফোল্ডারের জন্য)
   let swRegistration = null;
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./firebase-messaging-sw.js')
@@ -626,11 +625,16 @@ main { flex: 1; padding: 16px; max-width: 720px; margin: 0 auto; width: 100%; }
     saveData();
   };
 
+  // 🔔 নোটিফিকেশন ফাংশন (ব্রাউজার সাপোর্ট চেক সহ)
   window.enableNotifications = async () => {
     try {
+      if (!('Notification' in window)) {
+        toast('দুঃখিত! আপনার ব্রাউজারটি নোটিফিকেশন সাপোর্ট করে না। Google Chrome ব্যবহার করুন।', true);
+        return;
+      }
+
       const permission = await Notification.requestPermission();
       if (permission === 'granted') {
-        // ✅ নোটিফিকেশন ফিক্স: সার্ভিস ওয়ার্কার রেজিস্ট্রেশন পাস করা হলো
         const tokenOptions = { vapidKey: VAPID_KEY };
         if (swRegistration) tokenOptions.serviceWorkerRegistration = swRegistration;
         
@@ -639,8 +643,13 @@ main { flex: 1; padding: 16px; max-width: 720px; margin: 0 auto; width: 100%; }
         if (token) {
           await updateDoc(doc(db, "users", currentUser.uid), { fcmToken: token });
           toast('নোটিফিকেশন চালু হয়েছে!');
-        } else { toast('টোকেন পাওয়া যায়নি, আবার চেষ্টা করুন', true); }
-      } else { toast('আপনি অনুমতি দেননি', true); }
+          document.getElementById('notifyBtn').querySelector('.title').textContent = '✅ নোটিফিকেশন চালু আছে';
+        } else { 
+          toast('টোকেন পাওয়া যায়নি, আবার চেষ্টা করুন', true); 
+        }
+      } else { 
+        toast('আপনি অনুমতি দেননি', true); 
+      }
     } catch (err) { 
       toast('Error: ' + err.message, true); 
       console.error(err); 
