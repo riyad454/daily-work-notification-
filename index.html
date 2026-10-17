@@ -3,2265 +3,642 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<meta name="theme-color" content="#0a1628" />
 <title>Barakah — Personal Finance & Islamic Lifestyle</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="manifest" href="manifest.json" />
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
-/* ============ THEME & RESET ============ */
 :root {
-  --navy-900: #071021;
-  --navy-800: #0a1628;
-  --navy-700: #0f1f38;
-  --navy-600: #16294a;
-  --emerald: #10b981;
-  --emerald-dark: #059669;
-  --emerald-light: #34d399;
-  --gold: #fbbf24;
-  --gold-dark: #d97706;
-  --danger: #ef4444;
-  --warning: #f59e0b;
-  --info: #3b82f6;
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --card-bg: rgba(22, 41, 74, 0.7);
-  --card-border: rgba(16, 185, 129, 0.15);
-  --glass-bg: rgba(10, 22, 40, 0.85);
-  --shadow-lg: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
-  --shadow-glow: 0 0 30px rgba(16, 185, 129, 0.3);
-  --radius: 16px;
-  --radius-sm: 10px;
-  --radius-lg: 24px;
-  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --navy-900: #071021; --navy-800: #0a1628; --navy-700: #0f1f38; --navy-600: #16294a;
+  --emerald: #10b981; --emerald-dark: #059669; --emerald-light: #34d399;
+  --gold: #fbbf24; --gold-dark: #d97706; --danger: #ef4444; --info: #3b82f6;
+  --text-primary: #f1f5f9; --text-secondary: #94a3b8; --text-muted: #64748b;
+  --card-bg: rgba(22, 41, 74, 0.7); --card-border: rgba(16, 185, 129, 0.15);
+  --glass-bg: rgba(10, 22, 40, 0.85); --transition: 0.3s;
 }
-
 [data-theme="light"] {
-  --navy-900: #f0f4f8;
-  --navy-800: #ffffff;
-  --navy-700: #f8fafc;
-  --navy-600: #e2e8f0;
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #94a3b8;
-  --card-bg: rgba(255, 255, 255, 0.9);
-  --card-border: rgba(16, 185, 129, 0.2);
+  --navy-900: #f0f4f8; --navy-800: #ffffff; --navy-700: #f8fafc; --navy-600: #e2e8f0;
+  --text-primary: #0f172a; --text-secondary: #475569; --text-muted: #94a3b8;
+  --card-bg: rgba(255, 255, 255, 0.9); --card-border: rgba(16, 185, 129, 0.2);
   --glass-bg: rgba(255, 255, 255, 0.85);
 }
-
-* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-html, body { height: 100%; overflow-x: hidden; }
-body {
-  font-family: 'Hind Siliguri', 'Poppins', -apple-system, sans-serif;
-  background: var(--navy-800);
-  color: var(--text-primary);
-  transition: background 0.4s ease, color 0.4s ease;
-  line-height: 1.5;
-  overscroll-behavior-y: none;
-}
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(ellipse at 20% 0%, rgba(16, 185, 129, 0.12), transparent 50%),
-    radial-gradient(ellipse at 80% 100%, rgba(251, 191, 36, 0.08), transparent 50%);
-  pointer-events: none;
-  z-index: 0;
-}
-button, input, select, textarea { font-family: inherit; color: inherit; }
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind Siliguri', sans-serif; -webkit-tap-highlight-color: transparent; }
+body { background: var(--navy-800); color: var(--text-primary); transition: 0.4s; line-height: 1.5; overscroll-behavior-y: none; }
+button, input, select { font-family: inherit; }
 button { cursor: pointer; border: none; background: none; }
-a { color: inherit; text-decoration: none; }
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-thumb { background: var(--navy-600); border-radius: 10px; }
 
-/* ============ COMMON ============ */
 .hidden { display: none !important; }
-.flex { display: flex; }
-.center { display: flex; align-items: center; justify-content: center; }
-.gap-8 { gap: 8px; } .gap-12 { gap: 12px; } .gap-16 { gap: 16px; }
+.flex { display: flex; } .gap-8 { gap: 8px; } .gap-16 { gap: 16px; }
 .mt-8 { margin-top: 8px; } .mt-16 { margin-top: 16px; } .mt-24 { margin-top: 24px; }
-.text-gold { color: var(--gold); }
-.text-emerald { color: var(--emerald); }
-.text-danger { color: var(--danger); }
-.text-muted { color: var(--text-secondary); }
-.text-center { text-align: center; }
-.fw-600 { font-weight: 600; } .fw-700 { font-weight: 700; }
-
-.btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  padding: 14px 24px; border-radius: var(--radius-sm); font-weight: 600;
-  font-size: 15px; transition: var(--transition); width: 100%;
-}
-.btn-primary {
-  background: linear-gradient(135deg, var(--emerald), var(--emerald-dark));
-  color: #fff; box-shadow: 0 8px 20px -6px rgba(16, 185, 129, 0.5);
-}
-.btn-primary:active { transform: scale(0.97); }
-.btn-gold {
-  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-  color: #1a1a1a;
-}
-.btn-outline {
-  border: 1.5px solid var(--card-border); background: var(--card-bg);
-  color: var(--text-primary);
-}
-.btn-danger { background: linear-gradient(135deg, #ef4444, #b91c1c); color: #fff; }
-.btn-sm { padding: 8px 16px; font-size: 13px; width: auto; }
-
-.card {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius);
-  padding: 18px;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  transition: var(--transition);
-}
-.card-glow { box-shadow: var(--shadow-glow); }
-
+.text-center { text-align: center; } .text-muted { color: var(--text-secondary); }
+.fw-700 { font-weight: 700; }
+.btn { display: inline-flex; align-items: center; justify-content: center; padding: 14px 20px; border-radius: 12px; font-weight: 600; font-size: 14px; transition: 0.3s; width: 100%; }
+.btn-primary { background: linear-gradient(135deg, var(--emerald), var(--emerald-dark)); color: #fff; box-shadow: 0 8px 20px -6px rgba(16, 185, 129, 0.4); }
+.btn-outline { border: 1.5px solid var(--card-border); background: var(--card-bg); color: var(--text-primary); }
+.btn-danger { background: linear-gradient(135deg, var(--danger), #b91c1c); color: #fff; }
+.btn-sm { padding: 8px 14px; font-size: 12px; width: auto; }
+.card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 18px; backdrop-filter: blur(10px); }
 .input-group { margin-bottom: 16px; }
-.input-group label {
-  display: block; font-size: 13px; font-weight: 500;
-  color: var(--text-secondary); margin-bottom: 6px;
-}
-.input {
-  width: 100%; padding: 14px 16px; background: var(--navy-700);
-  border: 1.5px solid var(--card-border); border-radius: var(--radius-sm);
-  font-size: 15px; color: var(--text-primary); transition: var(--transition);
-}
-.input:focus { outline: none; border-color: var(--emerald); box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15); }
-.input::placeholder { color: var(--text-muted); }
-select.input { cursor: pointer; }
-textarea.input { resize: vertical; min-height: 70px; }
+.input-group label { display: block; font-size: 12px; font-weight: 500; color: var(--text-secondary); margin-bottom: 6px; }
+.input { width: 100%; padding: 14px 16px; background: var(--navy-700); border: 1.5px solid var(--card-border); border-radius: 12px; font-size: 15px; color: var(--text-primary); outline: none; transition: 0.3s; }
+.input:focus { border-color: var(--emerald); box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15); }
 
-.icon { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.icon-sm { width: 18px; height: 18px; }
-.icon-lg { width: 28px; height: 28px; }
-
-.section-title {
-  font-size: 17px; font-weight: 700; margin-bottom: 12px;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.section-title a, .section-title button { font-size: 13px; color: var(--emerald); font-weight: 500; }
-
-.badge {
-  display: inline-block; padding: 3px 10px; border-radius: 20px;
-  font-size: 11px; font-weight: 600;
-}
-.badge-emerald { background: rgba(16, 185, 129, 0.15); color: var(--emerald-light); }
-.badge-gold { background: rgba(251, 191, 36, 0.15); color: var(--gold); }
-.badge-danger { background: rgba(239, 68, 68, 0.15); color: #fca5a5; }
-
-/* ============ SPLASH ============ */
-#splash {
-  position: fixed; inset: 0; z-index: 9999;
-  background: linear-gradient(160deg, var(--navy-900), var(--navy-800), var(--navy-700));
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  transition: opacity 0.6s ease, visibility 0.6s;
-}
-#splash.hide { opacity: 0; visibility: hidden; }
-.splash-logo {
-  width: 100px; height: 100px; border-radius: 28px;
-  background: linear-gradient(135deg, var(--emerald), var(--emerald-dark));
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 20px 50px -10px rgba(16, 185, 129, 0.6);
-  animation: logoPop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-  position: relative; overflow: hidden;
-}
-.splash-logo::after {
-  content: ''; position: absolute; inset: -50%;
-  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
-  animation: shine 2s infinite;
-}
-@keyframes logoPop { 0% { transform: scale(0.3); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-@keyframes shine { 0% { transform: translateX(-100%) rotate(45deg); } 100% { transform: translateX(100%) rotate(45deg); } }
-.splash-title {
-  margin-top: 24px; font-size: 30px; font-weight: 700;
-  background: linear-gradient(135deg, var(--emerald-light), var(--gold));
-  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-  letter-spacing: -0.5px;
-}
-.splash-subtitle { margin-top: 8px; color: var(--text-secondary); font-size: 14px; }
-.splash-loader {
-  margin-top: 40px; width: 40px; height: 40px; border-radius: 50%;
-  border: 3px solid var(--card-border); border-top-color: var(--emerald);
-  animation: spin 0.8s linear infinite;
-}
+#splash { position: fixed; inset: 0; z-index: 9999; background: var(--navy-900); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.5s; }
+.splash-title { font-size: 32px; font-weight: 700; color: var(--emerald); margin-top: 20px; letter-spacing: -0.5px; }
+.splash-loader { width: 40px; height: 40px; border: 3px solid var(--card-border); border-top-color: var(--emerald); border-radius: 50%; animation: spin 1s linear infinite; margin-top: 30px; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ============ AUTH ============ */
-#authScreen {
-  position: fixed; inset: 0; z-index: 100;
-  display: flex; flex-direction: column; padding: 24px;
-  overflow-y: auto;
-}
-.auth-brand { text-align: center; margin: 40px 0 32px; }
-.auth-brand .logo {
-  width: 72px; height: 72px; margin: 0 auto 16px; border-radius: 22px;
-  background: linear-gradient(135deg, var(--emerald), var(--emerald-dark));
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 12px 30px -8px rgba(16, 185, 129, 0.5);
-}
-.auth-brand h1 { font-size: 26px; font-weight: 700; }
-.auth-brand p { color: var(--text-secondary); font-size: 13px; margin-top: 4px; }
-.auth-tabs {
-  display: flex; background: var(--navy-700); border-radius: var(--radius-sm);
-  padding: 4px; margin-bottom: 24px; border: 1px solid var(--card-border);
-}
-.auth-tab {
-  flex: 1; padding: 11px; border-radius: 8px; font-weight: 600;
-  font-size: 14px; color: var(--text-secondary); transition: var(--transition);
-}
-.auth-tab.active {
-  background: linear-gradient(135deg, var(--emerald), var(--emerald-dark));
-  color: #fff; box-shadow: 0 4px 12px -3px rgba(16, 185, 129, 0.5);
-}
-.auth-form { animation: fadeIn 0.4s ease; }
+#authScreen { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; padding: 24px; background: var(--navy-800); overflow-y: auto; }
+.auth-tabs { display: flex; background: var(--navy-700); border-radius: 12px; padding: 4px; margin-bottom: 24px; border: 1px solid var(--card-border); }
+.auth-tab { flex: 1; padding: 12px; border-radius: 8px; font-weight: 600; font-size: 14px; color: var(--text-secondary); transition: 0.3s; }
+.auth-tab.active { background: var(--emerald); color: #fff; box-shadow: 0 4px 12px rgba(16,185,129,0.3); }
+
+#app { display: none; flex-direction: column; padding-bottom: 84px; min-height: 100vh; }
+#app.active { display: flex; }
+.top-bar { position: sticky; top: 0; z-index: 50; display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: var(--glass-bg); backdrop-filter: blur(10px); border-bottom: 1px solid var(--card-border); }
+main { flex: 1; padding: 16px; max-width: 720px; margin: 0 auto; width: 100%; }
+.page { display: none; animation: fadeIn 0.3s ease; }
+.page.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-.pin-inputs { display: flex; gap: 12px; justify-content: center; margin: 20px 0; }
-.pin-box {
-  width: 56px; height: 64px; text-align: center; font-size: 26px; font-weight: 700;
-  background: var(--navy-700); border: 1.5px solid var(--card-border);
-  border-radius: var(--radius-sm); color: var(--emerald);
-}
-.pin-box:focus { outline: none; border-color: var(--emerald); box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2); }
-
-/* ============ APP LAYOUT ============ */
-#app {
-  display: none; min-height: 100vh; flex-direction: column;
-  padding-bottom: 84px; position: relative; z-index: 1;
-}
-#app.active { display: flex; }
-
-.top-bar {
-  position: sticky; top: 0; z-index: 50;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 20px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--card-border);
-}
-.top-bar .greet h2 { font-size: 17px; font-weight: 700; }
-.top-bar .greet p { font-size: 12px; color: var(--text-secondary); }
-.top-actions { display: flex; gap: 8px; align-items: center; }
-.icon-btn {
-  width: 42px; height: 42px; border-radius: 12px; display: flex;
-  align-items: center; justify-content: center;
-  background: var(--card-bg); border: 1px solid var(--card-border);
-  color: var(--text-primary); transition: var(--transition);
-}
-.icon-btn:active { transform: scale(0.92); }
-
-main { flex: 1; padding: 16px 16px 20px; max-width: 720px; margin: 0 auto; width: 100%; }
-.page { display: none; animation: pageIn 0.35s cubic-bezier(0.4,0,0.2,1); }
-.page.active { display: block; }
-@keyframes pageIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-
-/* ============ BOTTOM NAV ============ */
-.bottom-nav {
-  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
-  display: flex; align-items: center; justify-content: space-around;
-  padding: 8px 8px 12px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-  border-top: 1px solid var(--card-border);
-}
-.nav-item {
-  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
-  padding: 8px 4px; color: var(--text-muted); font-size: 10px; font-weight: 500;
-  transition: var(--transition); border-radius: 12px;
-}
-.nav-item.active { color: var(--emerald); }
-.nav-item.active .icon { filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.6)); }
-.nav-item span { font-size: 10px; }
-.nav-add {
-  width: 56px; height: 56px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--emerald), var(--emerald-dark));
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 8px 24px -6px rgba(16, 185, 129, 0.7);
-  color: #fff; margin-top: -20px; transition: var(--transition);
-}
-.nav-add:active { transform: scale(0.9); }
-
-/* ============ DASHBOARD ============ */
-.balance-card {
-  background: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%);
-  border-radius: var(--radius-lg); padding: 22px; color: #fff;
-  position: relative; overflow: hidden;
-  box-shadow: 0 20px 40px -12px rgba(16, 185, 129, 0.5);
-}
-.balance-card::before {
-  content: ''; position: absolute; top: -50px; right: -30px;
-  width: 180px; height: 180px; border-radius: 50%;
-  background: rgba(255,255,255,0.1);
-}
-.balance-card::after {
-  content: ''; position: absolute; bottom: -60px; left: -20px;
-  width: 140px; height: 140px; border-radius: 50%;
-  background: rgba(251,191,36,0.15);
-}
-.balance-card .label { font-size: 12px; opacity: 0.9; position: relative; z-index: 1; }
-.balance-card .amount { font-size: 32px; font-weight: 700; margin-top: 4px; position: relative; z-index: 1; letter-spacing: -1px; }
-.balance-card .row { display: flex; gap: 16px; margin-top: 18px; position: relative; z-index: 1; }
-.balance-card .stat { flex: 1; }
-.balance-card .stat .lbl { font-size: 11px; opacity: 0.85; }
-.balance-card .stat .val { font-size: 15px; font-weight: 600; margin-top: 2px; }
-.balance-card .stat + .stat { border-left: 1px solid rgba(255,255,255,0.2); padding-left: 16px; }
-
+.balance-card { background: linear-gradient(135deg, #10b981, #047857); border-radius: 20px; padding: 22px; color: #fff; box-shadow: 0 15px 30px -10px rgba(16, 185, 129, 0.4); position: relative; overflow: hidden; }
+.balance-card::before { content: ''; position: absolute; top: -50px; right: -30px; width: 150px; height: 150px; border-radius: 50%; background: rgba(255,255,255,0.1); }
+.balance-card .amount { font-size: 32px; font-weight: 700; margin-top: 4px; position: relative; z-index: 1; }
 .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 16px; }
-.stat-card {
-  background: var(--card-bg); border: 1px solid var(--card-border);
-  border-radius: var(--radius); padding: 16px;
-  transition: var(--transition);
-}
-.stat-card:active { transform: scale(0.98); }
-.stat-card .ic {
-  width: 38px; height: 38px; border-radius: 11px;
-  display: flex; align-items: center; justify-content: center; margin-bottom: 10px;
-}
-.stat-card .lbl { font-size: 11px; color: var(--text-secondary); }
+.stat-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; }
+.stat-card .lbl { font-size: 12px; color: var(--text-secondary); }
 .stat-card .val { font-size: 18px; font-weight: 700; margin-top: 2px; }
 
-.prayer-mini {
-  background: linear-gradient(135deg, var(--navy-600), var(--navy-700));
-  border: 1px solid var(--card-border); border-radius: var(--radius);
-  padding: 16px; margin-top: 16px;
-  display: flex; align-items: center; gap: 14px;
-}
-.prayer-mini .ic {
-  width: 48px; height: 48px; border-radius: 14px;
-  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  box-shadow: 0 8px 20px -6px rgba(251, 191, 36, 0.5);
-}
-.prayer-mini .info { flex: 1; }
-.prayer-mini .info .name { font-size: 15px; font-weight: 700; }
-.prayer-mini .info .time { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
-.prayer-mini .countdown {
-  font-size: 18px; font-weight: 700; color: var(--gold);
-  font-variant-numeric: tabular-nums;
-}
-
-.quick-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 16px; }
-.qa {
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  padding: 12px 6px; background: var(--card-bg);
-  border: 1px solid var(--card-border); border-radius: var(--radius-sm);
-  transition: var(--transition); font-size: 11px; color: var(--text-secondary);
-  text-align: center;
-}
-.qa:active { transform: scale(0.95); }
-.qa .ic {
-  width: 36px; height: 36px; border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-}
-
-/* ============ TRANSACTIONS ============ */
-.txn-list { display: flex; flex-direction: column; gap: 10px; }
-.txn-item {
-  display: flex; align-items: center; gap: 12px;
-  padding: 14px; background: var(--card-bg);
-  border: 1px solid var(--card-border); border-radius: var(--radius-sm);
-  transition: var(--transition); cursor: pointer;
-}
-.txn-item:active { transform: scale(0.99); }
-.txn-item .ic {
-  width: 42px; height: 42px; border-radius: 12px;
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-}
+.txn-item { display: flex; align-items: center; gap: 12px; padding: 14px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
+.txn-item:active { transform: scale(0.98); }
+.txn-item .ic { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
 .txn-item .meta { flex: 1; min-width: 0; }
-.txn-item .meta .title { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.txn-item .meta .sub { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
-.txn-item .amt { font-size: 15px; font-weight: 700; white-space: nowrap; }
-.txn-item .amt.income { color: var(--emerald-light); }
-.txn-item .amt.expense { color: #fca5a5; }
+.txn-item .meta .title { font-size: 14px; font-weight: 600; }
+.txn-item .meta .sub { font-size: 11px; color: var(--text-secondary); }
+.txn-item .amt.expense { color: #fca5a5; font-weight: 700; }
+.txn-item .amt.income { color: var(--emerald-light); font-weight: 700; }
 
-.filter-chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 12px; }
-.filter-chips::-webkit-scrollbar { display: none; }
-.chip {
-  padding: 8px 14px; border-radius: 20px; font-size: 12px; font-weight: 500;
-  background: var(--card-bg); border: 1px solid var(--card-border);
-  color: var(--text-secondary); white-space: nowrap; transition: var(--transition);
-}
-.chip.active {
-  background: linear-gradient(135deg, var(--emerald), var(--emerald-dark));
-  color: #fff; border-color: transparent;
-}
+.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--glass-bg); backdrop-filter: blur(20px); display: flex; justify-content: space-around; padding: 10px 10px 15px; border-top: 1px solid var(--card-border); z-index: 100; }
+.nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: var(--text-muted); gap: 4px; transition: 0.3s; }
+.nav-item.active { color: var(--emerald); }
+.nav-add { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, var(--emerald), var(--emerald-dark)); color: white; font-size: 28px; display: flex; align-items: center; justify-content: center; margin-top: -25px; box-shadow: 0 8px 20px rgba(16,185,129,0.5); }
 
-/* ============ PRAYER ============ */
-.prayer-hero {
-  background: linear-gradient(135deg, var(--navy-600), var(--navy-700));
-  border: 1px solid var(--card-border); border-radius: var(--radius-lg);
-  padding: 24px; text-align: center; position: relative; overflow: hidden;
-}
-.prayer-hero::before {
-  content: ''; position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
-  width: 200px; height: 200px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(251,191,36,0.2), transparent 70%);
-}
-.prayer-hero .label { font-size: 13px; color: var(--text-secondary); position: relative; }
-.prayer-hero .next-name { font-size: 26px; font-weight: 700; color: var(--gold); margin-top: 4px; position: relative; }
-.prayer-hero .next-time { font-size: 15px; color: var(--text-secondary); margin-top: 2px; position: relative; }
-.prayer-hero .cd {
-  font-size: 40px; font-weight: 700; margin-top: 14px; position: relative;
-  font-variant-numeric: tabular-nums;
-  background: linear-gradient(135deg, var(--emerald-light), var(--gold));
-  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-}
-
-.prayer-list { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
-.prayer-row {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 16px; background: var(--card-bg);
-  border: 1px solid var(--card-border); border-radius: var(--radius-sm);
-  transition: var(--transition);
-}
-.prayer-row.next {
-  border-color: var(--gold); background: linear-gradient(135deg, rgba(251,191,36,0.1), transparent);
-  box-shadow: 0 0 20px -8px rgba(251,191,36,0.5);
-}
-.prayer-row .n { display: flex; align-items: center; gap: 10px; }
-.prayer-row .n .dot {
-  width: 8px; height: 8px; border-radius: 50%; background: var(--text-muted);
-}
-.prayer-row.next .n .dot { background: var(--gold); box-shadow: 0 0 8px var(--gold); }
-.prayer-row .n .name { font-size: 14px; font-weight: 600; }
-.prayer-row .n .ar { font-size: 12px; color: var(--text-secondary); margin-left: 4px; }
-.prayer-row .t { font-size: 14px; font-weight: 600; color: var(--emerald-light); }
-
-/* ============ QIBLA & TASBIH ============ */
-.compass {
-  width: 240px; height: 240px; border-radius: 50%;
-  margin: 20px auto; position: relative;
-  background: radial-gradient(circle, var(--navy-700), var(--navy-800));
-  border: 3px solid var(--card-border);
-  box-shadow: inset 0 0 40px rgba(16,185,129,0.1), 0 20px 40px -10px rgba(0,0,0,0.5);
-  display: flex; align-items: center; justify-content: center;
-}
-.compass .needle {
-  width: 6px; height: 100px; position: absolute; top: 20px; left: 50%;
-  transform-origin: bottom center; transform: translateX(-50%);
-  transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
-}
-.compass .needle::before {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(to bottom, var(--gold), var(--emerald));
-  border-radius: 6px;
-}
-.compass .center-dot {
-  width: 16px; height: 16px; border-radius: 50%;
-  background: var(--emerald); z-index: 2;
-  box-shadow: 0 0 20px var(--emerald);
-}
-.compass .dir-label {
-  position: absolute; font-size: 11px; font-weight: 700; color: var(--text-muted);
-}
-.compass .dir-label.n { top: 8px; left: 50%; transform: translateX(-50%); color: var(--gold); }
-.compass .dir-label.s { bottom: 8px; left: 50%; transform: translateX(-50%); }
-.compass .dir-label.e { right: 10px; top: 50%; transform: translateY(-50%); }
-.compass .dir-label.w { left: 10px; top: 50%; transform: translateY(-50%); }
-
-.tasbih-counter {
-  text-align: center; padding: 30px 20px;
-}
-.tasbih-counter .num {
-  font-size: 72px; font-weight: 700; line-height: 1;
-  background: linear-gradient(135deg, var(--emerald-light), var(--gold));
-  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-  font-variant-numeric: tabular-nums;
-}
-.tasbih-counter .target { font-size: 14px; color: var(--text-secondary); margin-top: 8px; }
-.tasbih-btn {
-  width: 140px; height: 140px; border-radius: 50%;
-  margin: 24px auto 0;
-  background: linear-gradient(135deg, var(--emerald), var(--emerald-dark));
-  color: #fff; font-size: 18px; font-weight: 700;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 15px 35px -10px rgba(16,185,129,0.6);
-  transition: var(--transition);
-}
-.tasbih-btn:active { transform: scale(0.92); box-shadow: 0 8px 20px -8px rgba(16,185,129,0.6); }
-
-/* ============ SAVINGS ============ */
-.goal-card {
-  background: var(--card-bg); border: 1px solid var(--card-border);
-  border-radius: var(--radius); padding: 16px; margin-bottom: 12px;
-}
-.goal-card .head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
-.goal-card .head .name { font-size: 15px; font-weight: 700; }
-.goal-card .head .meta { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
-.progress {
-  height: 8px; background: var(--navy-700); border-radius: 10px;
-  overflow: hidden; margin: 12px 0 8px;
-}
-.progress .bar {
-  height: 100%; border-radius: 10px;
-  background: linear-gradient(90deg, var(--emerald), var(--gold));
-  transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
-}
-.goal-card .amounts {
-  display: flex; justify-content: space-between; font-size: 12px;
-  color: var(--text-secondary);
-}
-.goal-card .amounts strong { color: var(--text-primary); font-size: 13px; }
-
-/* ============ CHALLENGE ============ */
-.streak-card {
-  text-align: center; padding: 28px 20px;
-  background: linear-gradient(135deg, rgba(251,191,36,0.15), rgba(16,185,129,0.1));
-  border: 1px solid var(--card-border); border-radius: var(--radius-lg);
-}
-.streak-card .fire { font-size: 54px; }
-.streak-card .num {
-  font-size: 42px; font-weight: 700; color: var(--gold); margin-top: 4px;
-}
-.streak-card .lbl { font-size: 13px; color: var(--text-secondary); }
-
-.calendar {
-  display: grid; grid-template-columns: repeat(7, 1fr);
-  gap: 6px; margin-top: 16px;
-}
-.cal-cell {
-  aspect-ratio: 1; border-radius: 8px; display: flex;
-  align-items: center; justify-content: center; font-size: 11px;
-  background: var(--navy-700); color: var(--text-muted);
-  border: 1px solid transparent;
-}
-.cal-cell.done { background: rgba(16,185,129,0.2); color: var(--emerald-light); border-color: var(--emerald); }
-.cal-cell.nospend { background: rgba(251,191,36,0.2); color: var(--gold); border-color: var(--gold); }
-.cal-cell.today { border-color: var(--emerald); font-weight: 700; }
-
-/* ============ BILLS ============ */
-.bill-item {
-  display: flex; align-items: center; gap: 12px;
-  padding: 14px; background: var(--card-bg);
-  border: 1px solid var(--card-border); border-radius: var(--radius-sm);
-  margin-bottom: 10px;
-}
-.bill-item .ic {
-  width: 42px; height: 42px; border-radius: 12px;
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-}
-.bill-item .meta { flex: 1; }
-.bill-item .meta .t { font-size: 14px; font-weight: 600; }
-.bill-item .meta .d { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
-.bill-item .amt { font-size: 14px; font-weight: 700; color: var(--gold); }
-
-/* ============ PROFILE / SETTINGS ============ */
-.profile-head {
-  text-align: center; padding: 20px 0 24px;
-}
-.avatar {
-  width: 88px; height: 88px; border-radius: 50%;
-  margin: 0 auto 12px;
-  background: linear-gradient(135deg, var(--emerald), var(--gold));
-  display: flex; align-items: center; justify-content: center;
-  font-size: 34px; font-weight: 700; color: #fff;
-  box-shadow: 0 15px 35px -10px rgba(16,185,129,0.5);
-}
-.profile-head .nm { font-size: 19px; font-weight: 700; }
-.profile-head .em { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
-
-.list-menu { display: flex; flex-direction: column; gap: 2px; }
-.menu-item {
-  display: flex; align-items: center; gap: 14px;
-  padding: 15px 16px; background: var(--card-bg);
-  border: 1px solid var(--card-border); border-radius: var(--radius-sm);
-  margin-bottom: 8px; transition: var(--transition);
-}
-.menu-item:active { transform: scale(0.99); }
-.menu-item .ic {
-  width: 38px; height: 38px; border-radius: 11px;
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-}
-.menu-item .txt { flex: 1; }
-.menu-item .txt .t { font-size: 14px; font-weight: 500; }
-.menu-item .txt .s { font-size: 11px; color: var(--text-secondary); margin-top: 1px; }
-.menu-item .arrow { color: var(--text-muted); }
-
-.switch {
-  position: relative; width: 46px; height: 26px; flex-shrink: 0;
-}
-.switch input { opacity: 0; width: 0; height: 0; }
-.switch .slider {
-  position: absolute; inset: 0; border-radius: 26px;
-  background: var(--navy-600); transition: var(--transition); cursor: pointer;
-}
-.switch .slider::before {
-  content: ''; position: absolute; width: 20px; height: 20px;
-  border-radius: 50%; background: #fff; top: 3px; left: 3px;
-  transition: var(--transition);
-}
-.switch input:checked + .slider { background: var(--emerald); }
-.switch input:checked + .slider::before { transform: translateX(20px); }
-
-/* ============ MODAL ============ */
-.modal-backdrop {
-  position: fixed; inset: 0; z-index: 200;
-  background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
-  display: none; align-items: flex-end; justify-content: center;
-  animation: fadeIn 0.3s;
-}
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); display: none; align-items: flex-end; z-index: 200; }
 .modal-backdrop.active { display: flex; }
-.modal {
-  width: 100%; max-width: 500px; max-height: 90vh;
-  background: var(--navy-800); border-top-left-radius: 24px;
-  border-top-right-radius: 24px; padding: 20px;
-  overflow-y: auto; animation: slideUp 0.35s cubic-bezier(0.4,0,0.2,1);
-  border: 1px solid var(--card-border); border-bottom: none;
-}
+.modal { background: var(--navy-800); width: 100%; border-radius: 24px 24px 0 0; padding: 24px 20px; max-height: 90vh; overflow-y: auto; animation: slideUp 0.3s ease; }
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-.modal .handle {
-  width: 40px; height: 4px; border-radius: 4px;
-  background: var(--navy-600); margin: 0 auto 16px;
-}
-.modal .m-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+.cat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.cat { padding: 10px 4px; border-radius: 10px; background: var(--navy-700); display: flex; flex-direction: column; align-items: center; font-size: 11px; border: 1.5px solid transparent; transition: 0.2s; }
+.cat.active { border-color: var(--emerald); background: rgba(16,185,129,0.1); color: var(--emerald-light); }
 
-.type-toggle {
-  display: flex; background: var(--navy-700); border-radius: var(--radius-sm);
-  padding: 4px; margin-bottom: 18px;
-}
-.type-toggle button {
-  flex: 1; padding: 11px; border-radius: 8px; font-weight: 600;
-  font-size: 14px; color: var(--text-secondary); transition: var(--transition);
-}
-.type-toggle button.active.expense { background: linear-gradient(135deg, #ef4444, #b91c1c); color: #fff; }
-.type-toggle button.active.income { background: linear-gradient(135deg, var(--emerald), var(--emerald-dark)); color: #fff; }
+.prayer-hero { background: linear-gradient(135deg, var(--navy-600), var(--navy-700)); border: 1px solid var(--card-border); border-radius: 20px; padding: 24px; text-align: center; position: relative; }
+.prayer-hero .next-name { font-size: 24px; font-weight: 700; color: var(--gold); margin-top: 4px; }
+.prayer-hero .cd { font-size: 36px; font-weight: 700; margin-top: 14px; color: var(--emerald-light); font-variant-numeric: tabular-nums; }
+.prayer-list { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+.prayer-row { display: flex; justify-content: space-between; padding: 14px 16px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; }
+.prayer-row.next { border-color: var(--gold); background: rgba(251,191,36,0.1); }
 
-.cat-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px;
-}
-.cat {
-  display: flex; flex-direction: column; align-items: center; gap: 4px;
-  padding: 10px 4px; border-radius: 10px; font-size: 10px;
-  background: var(--navy-700); border: 1.5px solid transparent;
-  color: var(--text-secondary); transition: var(--transition);
-}
-.cat.active { border-color: var(--emerald); background: rgba(16,185,129,0.12); color: var(--emerald-light); }
-.cat .ic { width: 26px; height: 26px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+.compass { width: 220px; height: 220px; border-radius: 50%; margin: 20px auto; position: relative; background: var(--navy-700); border: 3px solid var(--card-border); display: flex; align-items: center; justify-content: center; }
+.compass .needle { width: 4px; height: 90px; position: absolute; top: 20px; left: 50%; transform-origin: bottom center; transform: translateX(-50%); transition: 0.5s; background: linear-gradient(to bottom, var(--gold), var(--emerald)); border-radius: 4px; }
+.compass .center-dot { width: 14px; height: 14px; border-radius: 50%; background: var(--emerald); z-index: 2; }
 
-/* Toast */
-.toast {
-  position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px);
-  background: var(--emerald); color: #fff; padding: 12px 22px;
-  border-radius: 30px; font-size: 13px; font-weight: 600;
-  box-shadow: var(--shadow-lg); z-index: 300;
-  opacity: 0; transition: var(--transition); pointer-events: none;
-  max-width: 90%; text-align: center;
-}
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast { position: fixed; bottom: 100px; left: 50%; transform: translate(-50%, 20px); background: var(--emerald); color: white; padding: 12px 24px; border-radius: 20px; font-weight: 600; font-size: 14px; opacity: 0; transition: 0.3s; z-index: 300; pointer-events: none; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
 .toast.error { background: var(--danger); }
-
-/* Skeleton */
-.skeleton {
-  background: linear-gradient(90deg, var(--navy-700) 25%, var(--navy-600) 50%, var(--navy-700) 75%);
-  background-size: 200% 100%; animation: sk 1.5s infinite;
-  border-radius: 8px;
-}
-@keyframes sk { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-
-/* Desktop tweaks */
-@media (min-width: 720px) {
-  .stats-grid { grid-template-columns: repeat(4, 1fr); }
-  .quick-actions { grid-template-columns: repeat(6, 1fr); }
-}
 </style>
 </head>
 <body>
 
-<!-- ============ SPLASH ============ -->
 <div id="splash">
-  <div class="splash-logo">
-    <svg class="icon icon-lg" style="color:#fff;width:48px;height:48px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-    </svg>
-  </div>
+  <div style="font-size:60px">🕌</div>
   <div class="splash-title">Barakah</div>
-  <div class="splash-subtitle" data-i18n="splashSub">Personal Finance & Islamic Lifestyle</div>
   <div class="splash-loader"></div>
 </div>
 
-<!-- ============ AUTH ============ -->
 <div id="authScreen" class="hidden">
-  <div class="auth-brand">
-    <div class="logo">
-      <svg class="icon icon-lg" style="color:#fff;width:40px;height:40px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-      </svg>
-    </div>
-    <h1>Barakah</h1>
-    <p data-i18n="authBrand">আপনার আর্থিক ও ইসলামিক জীবনসঙ্গী</p>
+  <div class="text-center mt-24" style="margin-bottom: 30px;">
+    <h1 style="color:var(--emerald); font-size: 32px; font-weight:700;">Barakah</h1>
+    <p class="text-muted">আপনার আর্থিক ও ইসলামিক জীবনসঙ্গী</p>
   </div>
-
+  
   <div class="auth-tabs">
-    <button class="auth-tab active" id="tabLogin" data-i18n="login">লগইন</button>
-    <button class="auth-tab" id="tabRegister" data-i18n="register">রেজিস্ট্রেশন</button>
+    <button class="auth-tab active" id="tabLogin">লগইন</button>
+    <button class="auth-tab" id="tabRegister">রেজিস্ট্রেশন</button>
   </div>
 
-  <!-- Login form -->
-  <form class="auth-form" id="loginForm">
+  <form id="loginForm">
     <div class="input-group">
-      <label data-i18n="emailOrPhone">ইমেইল বা মোবাইল নম্বর</label>
-      <input class="input" type="text" id="loginId" placeholder="example@gmail.com / 01XXXXXXXXX" required />
+      <label>ইমেইল</label>
+      <input class="input" type="email" id="loginEmail" placeholder="example@gmail.com" required />
     </div>
     <div class="input-group">
-      <label data-i18n="password">পাসওয়ার্ড</label>
-      <input class="input" type="password" id="loginPass" placeholder="••••••••" required minlength="4" />
+      <label>পাসওয়ার্ড</label>
+      <input class="input" type="password" id="loginPass" placeholder="••••••••" required minlength="6" />
     </div>
-    <button class="btn btn-primary" type="submit" data-i18n="loginBtn">লগইন করুন</button>
-    <div class="text-center mt-16">
-      <button type="button" class="text-emerald" style="font-size:13px" id="forgotBtn" data-i18n="forgot">পাসওয়ার্ড ভুলে গেছেন?</button>
-    </div>
+    <button class="btn btn-primary mt-16" type="submit">লগইন করুন</button>
   </form>
 
-  <!-- Register form -->
-  <form class="auth-form hidden" id="registerForm">
+  <form id="registerForm" class="hidden">
     <div class="input-group">
-      <label data-i18n="fullName">পূর্ণ নাম</label>
+      <label>পূর্ণ নাম</label>
       <input class="input" type="text" id="regName" placeholder="আপনার নাম" required />
     </div>
     <div class="input-group">
-      <label data-i18n="emailOrPhone">ইমেইল বা মোবাইল</label>
-      <input class="input" type="text" id="regId" placeholder="example@gmail.com / 01XXXXXXXXX" required />
+      <label>ইমেইল</label>
+      <input class="input" type="email" id="regEmail" placeholder="example@gmail.com" required />
     </div>
     <div class="input-group">
-      <label data-i18n="password">পাসওয়ার্ড (কমপক্ষে ৪ অক্ষর)</label>
-      <input class="input" type="password" id="regPass" placeholder="••••••••" required minlength="4" />
+      <label>পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)</label>
+      <input class="input" type="password" id="regPass" placeholder="••••••••" required minlength="6" />
     </div>
-    <div class="input-group">
-      <label data-i18n="pin4">৪ সংখ্যার PIN (দ্রুত লগইনের জন্য)</label>
-      <input class="input" type="tel" id="regPin" placeholder="1234" maxlength="4" pattern="[0-9]{4}" required />
-    </div>
-    <button class="btn btn-primary" type="submit" data-i18n="registerBtn">অ্যাকাউন্ট তৈরি করুন</button>
+    <button class="btn btn-primary mt-16" type="submit">অ্যাকাউন্ট তৈরি করুন</button>
   </form>
 </div>
 
-<!-- ============ MAIN APP ============ -->
 <div id="app">
-  <!-- TOP BAR -->
   <header class="top-bar">
-    <div class="greet">
-      <h2 id="greetName">আসসালামু আলাইকুম</h2>
-      <p id="greetDate">—</p>
+    <div>
+      <h2 id="greetName" style="font-size:18px; font-weight:700;">আসসালামু আলাইকুম</h2>
+      <p id="greetDate" class="text-muted" style="font-size:12px;">—</p>
     </div>
-    <div class="top-actions">
-      <button class="icon-btn" id="themeToggle" title="Theme">
-        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      </button>
-      <button class="icon-btn" id="langToggle" title="Language">
-        <span style="font-size:12px;font-weight:700" id="langLabel">EN</span>
-      </button>
+    <div class="flex gap-8">
+      <button onclick="toggleTheme()" style="font-size:20px" id="themeBtn">🌙</button>
+      <button onclick="logout()" style="font-size:20px">🚪</button>
     </div>
   </header>
 
   <main>
-    <!-- ============ HOME ============ -->
     <section class="page active" id="page-home">
       <div class="balance-card">
-        <div class="label" data-i18n="currentBalance">বর্তমান ব্যালেন্স</div>
+        <div style="font-size:13px; opacity:0.9; position:relative; z-index:1;">বর্তমান ব্যালেন্স</div>
         <div class="amount" id="balanceAmount">৳ ০</div>
-        <div class="row">
-          <div class="stat">
-            <div class="lbl" data-i18n="todayExpense">আজকের খরচ</div>
-            <div class="val" id="todayExpense">৳ ০</div>
-          </div>
-          <div class="stat">
-            <div class="lbl" data-i18n="monthExpense">এই মাসের খরচ</div>
-            <div class="val" id="monthExpense">৳ ০</div>
-          </div>
+        <div class="flex" style="gap:16px; margin-top:15px; border-top:1px solid rgba(255,255,255,0.2); padding-top:10px; position:relative; z-index:1;">
+          <div><div style="font-size:11px; opacity:0.8;">আজকের খরচ</div><div id="todayExpense" style="font-weight:600">৳ ০</div></div>
+          <div style="border-left:1px solid rgba(255,255,255,0.2); padding-left:16px;"><div style="font-size:11px; opacity:0.8;">এই মাসের খরচ</div><div id="monthExpense" style="font-weight:600">৳ ০</div></div>
         </div>
       </div>
 
       <div class="stats-grid">
         <div class="stat-card">
-          <div class="ic" style="background:rgba(16,185,129,0.15);color:var(--emerald)">
-            <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-          </div>
-          <div class="lbl" data-i18n="income">আয়</div>
-          <div class="val text-emerald" id="homeIncome">৳ ০</div>
+          <div class="lbl">মোট আয়</div>
+          <div class="val" style="color:var(--emerald-light)" id="homeIncome">৳ ০</div>
         </div>
         <div class="stat-card">
-          <div class="ic" style="background:rgba(239,68,68,0.15);color:#fca5a5">
-            <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M19 5L5 19M5 5l14 14"/></svg>
-          </div>
-          <div class="lbl" data-i18n="expense">খরচ</div>
-          <div class="val text-danger" id="homeExpense">৳ ০</div>
-        </div>
-        <div class="stat-card">
-          <div class="ic" style="background:rgba(251,191,36,0.15);color:var(--gold)">
-            <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-          </div>
-          <div class="lbl" data-i18n="budgetLeft">বাজেট বাকি</div>
-          <div class="val text-gold" id="budgetLeft">৳ ০</div>
-        </div>
-        <div class="stat-card">
-          <div class="ic" style="background:rgba(59,130,246,0.15);color:#93c5fd">
-            <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-          </div>
-          <div class="lbl" data-i18n="savings">সঞ্চয়</div>
-          <div class="val" style="color:#93c5fd" id="homeSavings">৳ ০</div>
+          <div class="lbl">বাজেট বাকি</div>
+          <div class="val" style="color:var(--gold)" id="budgetLeft">৳ ০</div>
         </div>
       </div>
 
-      <!-- Next prayer -->
-      <div class="prayer-mini" id="prayerMini">
-        <div class="ic">
-          <svg class="icon" style="color:#1a1a1a" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 3 2 5 3 7v6h8v-6c1-2 3-4 3-7a7 7 0 0 0-7-7z"/></svg>
+      <div class="card mt-16 flex" style="align-items:center; gap:12px;">
+        <div style="width:46px; height:46px; background:linear-gradient(135deg, var(--gold), var(--gold-dark)); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:24px;">🕌</div>
+        <div style="flex:1;">
+          <div style="font-size:14px; font-weight:700;" id="nextPrayerName">—</div>
+          <div style="font-size:12px; color:var(--text-secondary);" id="nextPrayerTime">লোড হচ্ছে...</div>
         </div>
-        <div class="info">
-          <div class="name" id="nextPrayerName">—</div>
-          <div class="time" id="nextPrayerTime" data-i18n="loading">লোড হচ্ছে...</div>
-        </div>
-        <div class="countdown" id="nextPrayerCd">--:--:--</div>
+        <div style="font-size:16px; font-weight:700; color:var(--gold);" id="nextPrayerCd">--:--</div>
       </div>
 
-      <div class="quick-actions mt-16">
-        <button class="qa" data-nav="budget">
-          <div class="ic" style="background:rgba(16,185,129,0.15);color:var(--emerald)"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M3 3v18h18M7 14l4-4 4 4 6-6"/></svg></div>
-          <span data-i18n="navReports">রিপোর্ট</span>
-        </button>
-        <button class="qa" data-nav="savings">
-          <div class="ic" style="background:rgba(251,191,36,0.15);color:var(--gold)"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M19 5L5 19M5 5l14 14"/></svg></div>
-          <span data-i18n="navSavings">সঞ্চয়</span>
-        </button>
-        <button class="qa" data-nav="qibla">
-          <div class="ic" style="background:rgba(59,130,246,0.15);color:#93c5fd"><svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></div>
-          <span data-i18n="navQibla">কিবলা</span>
-        </button>
-        <button class="qa" data-nav="challenge">
-          <div class="ic" style="background:rgba(239,68,68,0.15);color:#fca5a5"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg></div>
-          <span data-i18n="navChallenge">চ্যালেঞ্জ</span>
-        </button>
-        <button class="qa" data-nav="bills">
-          <div class="ic" style="background:rgba(139,92,246,0.15);color:#c4b5fd"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h4"/></svg></div>
-          <span data-i18n="navBills">বিল</span>
-        </button>
-        <button class="qa" data-nav="settings">
-          <div class="ic" style="background:rgba(148,163,184,0.15);color:#cbd5e1"><svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
-          <span data-i18n="navSettings">সেটিংস</span>
-        </button>
+      <div class="flex mt-24" style="justify-content:space-between; align-items:center;">
+        <h3 style="font-size:16px;">সাম্প্রতিক লেনদেন</h3>
+        <button class="text-emerald" onclick="showPage('transactions')" style="font-size:13px; font-weight:600; color:var(--emerald);">সব দেখুন</button>
       </div>
-
-      <div class="section-title mt-24">
-        <span data-i18n="recentTxns">সাম্প্রতিক লেনদেন</span>
-        <button data-nav="transactions" data-i18n="seeAll">সব দেখুন</button>
-      </div>
-      <div class="txn-list" id="recentTxns"></div>
-
-      <div class="section-title mt-24">
-        <span data-i18n="savingsProgress">সঞ্চয়ের অগ্রগতি</span>
-        <button data-nav="savings" data-i18n="seeAll">সব দেখুন</button>
-      </div>
-      <div id="homeGoals"></div>
+      <div class="mt-16" id="recentTxns"></div>
     </section>
 
-    <!-- ============ TRANSACTIONS ============ -->
     <section class="page" id="page-transactions">
-      <div class="section-title">
-        <span data-i18n="allTxns">সকল লেনদেন</span>
-        <button class="btn btn-sm btn-outline" id="exportCsvBtn">
-          <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-          CSV
-        </button>
-      </div>
-
-      <div class="filter-chips" id="filterChips">
-        <button class="chip active" data-filter="all" data-i18n="fAll">সব</button>
-        <button class="chip" data-filter="income" data-i18n="fIncome">আয়</button>
-        <button class="chip" data-filter="expense" data-i18n="fExpense">খরচ</button>
-        <button class="chip" data-filter="today" data-i18n="fToday">আজ</button>
-        <button class="chip" data-filter="week" data-i18n="fWeek">সপ্তাহ</button>
-        <button class="chip" data-filter="month" data-i18n="fMonth">মাস</button>
-      </div>
-
-      <div class="input-group" style="margin-bottom:10px">
-        <input class="input" type="search" id="txnSearch" placeholder="খুঁজুন..." data-i18n-ph="searchPh" />
-      </div>
-
-      <div class="txn-list" id="allTxns"></div>
+      <h3 class="mt-16" style="margin-bottom:16px;">সকল লেনদেন</h3>
+      <div id="allTxns"></div>
     </section>
 
-    <!-- ============ PRAYER ============ -->
     <section class="page" id="page-prayer">
       <div class="prayer-hero">
-        <div class="label" data-i18n="nextPrayer">পরবর্তী নামাজ</div>
+        <div style="font-size:13px; color:var(--text-secondary);">পরবর্তী নামাজ</div>
         <div class="next-name" id="pHeroName">—</div>
-        <div class="next-time" id="pHeroTime">লোড হচ্ছে...</div>
+        <div style="font-size:14px; color:var(--text-secondary);" id="pHeroTime">লোড হচ্ছে...</div>
         <div class="cd" id="pHeroCd">--:--:--</div>
       </div>
-
-      <div class="prayer-list" id="prayerList">
-        <div class="skeleton" style="height:54px"></div>
-        <div class="skeleton" style="height:54px"></div>
-        <div class="skeleton" style="height:54px"></div>
-        <div class="skeleton" style="height:54px"></div>
-        <div class="skeleton" style="height:54px"></div>
-      </div>
-
-      <div class="card mt-16">
-        <div class="section-title"><span data-i18n="dailyAmal">দৈনিক আমল চেকলিস্ট</span></div>
-        <div id="amalList"></div>
-      </div>
+      <div class="prayer-list" id="prayerList"></div>
     </section>
 
-    <!-- ============ QIBLA & TASBIH ============ -->
     <section class="page" id="page-qibla">
-      <div class="section-title"><span data-i18n="qiblaDir">কিবলার দিক</span></div>
-      <div class="compass" id="compass">
-        <div class="dir-label n">N</div>
-        <div class="dir-label s">S</div>
-        <div class="dir-label e">E</div>
-        <div class="dir-label w">W</div>
+      <h3 class="mt-16 text-center">কিবলার দিক</h3>
+      <div class="compass">
         <div class="needle" id="needle"></div>
         <div class="center-dot"></div>
       </div>
-      <div class="text-center text-muted" style="font-size:13px" id="qiblaInfo" data-i18n="qiblaHint">কিবলার দিক লোড হচ্ছে...</div>
-
-      <div class="card mt-24">
-        <div class="section-title"><span data-i18n="digitalTasbih">ডিজিটাল তাসবিহ</span></div>
-        <div class="tasbih-counter">
-          <div class="num" id="tasbihNum">0</div>
-          <div class="target"><span data-i18n="target">লক্ষ্য:</span> <span id="tasbihTarget">33</span></div>
-          <button class="tasbih-btn" id="tasbihBtn">
-            <svg class="icon" style="width:36px;height:36px" viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg>
-          </button>
-        </div>
-        <div class="flex gap-8 mt-16">
-          <button class="btn btn-outline" id="tasbihReset" data-i18n="reset">রিসেট</button>
-          <button class="btn btn-outline" id="tasbihChange" data-i18n="change">লক্ষ্য পরিবর্তন</button>
-        </div>
+      <p class="text-center text-muted" id="qiblaInfo" style="font-size:13px;">কিবলার দিক লোড হচ্ছে...</p>
+      
+      <div class="card mt-24 text-center">
+        <h3 style="margin-bottom:16px;">ডিজিটাল তাসবিহ</h3>
+        <div style="font-size:56px; font-weight:700; color:var(--emerald); line-height:1;" id="tasbihNum">0</div>
+        <div class="text-muted mt-8">লক্ষ্য: <span id="tasbihTarget">33</span></div>
+        <button onclick="incrementTasbih()" style="width:120px; height:120px; border-radius:50%; background:linear-gradient(135deg, var(--emerald), var(--emerald-dark)); color:white; font-size:18px; font-weight:700; margin:20px auto; box-shadow:0 10px 25px rgba(16,185,129,0.4);">+</button>
+        <button onclick="resetTasbih()" class="btn btn-outline" style="width:auto; margin:0 auto; padding:8px 20px;">রিসেট</button>
       </div>
     </section>
 
-    <!-- ============ BUDGET & REPORTS ============ -->
     <section class="page" id="page-budget">
-      <div class="section-title"><span data-i18n="budgetAndReports">বাজেট ও রিপোর্ট</span></div>
-
+      <h3 class="mt-16" style="margin-bottom:16px;">বাজেট ও রিপোর্ট</h3>
       <div class="card">
-        <div class="flex" style="justify-content:space-between;align-items:center;margin-bottom:10px">
-          <span style="font-size:14px;font-weight:600" data-i18n="monthlyBudget">মাসিক বাজেট</span>
-          <button class="text-emerald" style="font-size:13px" id="editBudgetBtn" data-i18n="edit">সম্পাদনা</button>
+        <div class="flex" style="justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <span style="font-size:14px; font-weight:600;">মাসিক বাজেট</span>
+          <button onclick="openBudgetModal()" style="font-size:13px; color:var(--emerald);">সম্পাদনা</button>
         </div>
-        <div class="flex" style="justify-content:space-between;font-size:12px;color:var(--text-secondary)">
-          <span><span data-i18n="used">ব্যবহৃত:</span> <strong id="budgetUsed" class="text-primary">৳ ০</strong></span>
-          <span><span data-i18n="total">মোট:</span> <strong id="budgetTotal" class="text-primary">৳ ০</strong></span>
+        <div class="flex" style="justify-content:space-between; font-size:12px; color:var(--text-secondary);">
+          <span>ব্যবহৃত: <strong id="budgetUsed" style="color:var(--text-primary)">৳ ০</strong></span>
+          <span>মোট: <strong id="budgetTotal" style="color:var(--text-primary)">৳ ০</strong></span>
         </div>
-        <div class="progress mt-8"><div class="bar" id="budgetBar" style="width:0%"></div></div>
-        <div class="text-center" style="font-size:11px;color:var(--text-secondary)" id="budgetWarn"></div>
+        <div style="height:8px; background:var(--navy-700); border-radius:10px; margin-top:10px; overflow:hidden;">
+          <div id="budgetBar" style="height:100%; background:linear-gradient(90deg, var(--emerald), var(--gold)); width:0%; transition:0.5s;"></div>
+        </div>
       </div>
-
       <div class="card mt-16">
-        <div class="section-title"><span data-i18n="categoryBreakdown">ক্যাটাগরি অনুযায়ী খরচ</span></div>
+        <h3 style="font-size:14px; margin-bottom:16px;">ক্যাটাগরি অনুযায়ী খরচ</h3>
         <canvas id="catChart" height="180"></canvas>
       </div>
-
-      <div class="card mt-16">
-        <div class="section-title"><span data-i18n="incomeVsExpense">আয় বনাম খরচ</span></div>
-        <canvas id="ieChart" height="180"></canvas>
-      </div>
     </section>
 
-    <!-- ============ SAVINGS ============ -->
-    <section class="page" id="page-savings">
-      <div class="section-title">
-        <span data-i18n="savingsGoals">সঞ্চয়ের লক্ষ্য</span>
-        <button class="btn btn-sm btn-primary" style="width:auto" id="newGoalBtn">+ <span data-i18n="new">নতুন</span></button>
-      </div>
-      <div id="goalsList"></div>
-    </section>
-
-    <!-- ============ CHALLENGE ============ -->
-    <section class="page" id="page-challenge">
-      <div class="section-title"><span data-i18n="dailyChallenge">দৈনিক চ্যালেঞ্জ</span></div>
-
-      <div class="streak-card">
-        <div class="fire">🔥</div>
-        <div class="num" id="streakNum">0</div>
-        <div class="lbl" data-i18n="daysStreak">দিনের স্ট্রিক</div>
-      </div>
-
-      <div class="card mt-16">
-        <div class="section-title"><span data-i18n="todaysTasks">আজকের কাজ</span></div>
-        <div id="challengeTasks"></div>
-      </div>
-
-      <div class="card mt-16">
-        <div class="section-title"><span data-i18n="noSpendCalendar">No-Spend ক্যালেন্ডার</span></div>
-        <div class="calendar" id="noSpendCal"></div>
-        <div class="flex gap-16 mt-16" style="font-size:11px;color:var(--text-secondary);justify-content:center">
-          <span><span style="display:inline-block;width:10px;height:10px;background:rgba(16,185,129,0.5);border-radius:3px;margin-right:4px"></span><span data-i18n="spent">খরচ হয়েছে</span></span>
-          <span><span style="display:inline-block;width:10px;height:10px;background:rgba(251,191,36,0.5);border-radius:3px;margin-right:4px"></span>No-Spend</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ BILLS ============ -->
-    <section class="page" id="page-bills">
-      <div class="section-title">
-        <span data-i18n="recurringBills">নিয়মিত বিল</span>
-        <button class="btn btn-sm btn-primary" style="width:auto" id="newBillBtn">+ <span data-i18n="new">নতুন</span></button>
-      </div>
-      <div id="billsList"></div>
-    </section>
-
-    <!-- ============ PROFILE ============ -->
     <section class="page" id="page-profile">
-      <div class="profile-head">
-        <div class="avatar" id="profileAvatar">B</div>
-        <div class="nm" id="profileName">ব্যবহারকারী</div>
-        <div class="em" id="profileEmail">—</div>
+      <div class="text-center mt-24">
+        <div style="width:80px; height:80px; background:linear-gradient(135deg, var(--emerald), var(--gold)); color:white; font-size:32px; font-weight:bold; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; box-shadow:0 10px 20px rgba(0,0,0,0.2);" id="profileAvatar">B</div>
+        <h2 id="profileName" style="font-size:20px;">ব্যবহারকারী</h2>
+        <p class="text-muted" id="profileEmail">—</p>
       </div>
 
-      <div class="list-menu">
-        <button class="menu-item" data-nav="budget">
-          <div class="ic" style="background:rgba(16,185,129,0.15);color:var(--emerald)"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M3 3v18h18M7 14l4-4 4 4 6-6"/></svg></div>
-          <div class="txt"><div class="t" data-i18n="budgetAndReports">বাজেট ও রিপোর্ট</div><div class="s" data-i18n="budgetSub">মাসিক বাজেট ও চার্ট</div></div>
-          <div class="arrow">›</div>
+      <div class="mt-24 list-menu">
+        <button class="txn-item" style="width:100%; text-align:left;" onclick="showPage('budget')">
+          <div class="ic" style="background:rgba(16,185,129,0.15); color:var(--emerald)">📊</div>
+          <div class="meta"><div class="title">বাজেট ও রিপোর্ট</div></div>
+          <div style="color:var(--text-muted)">›</div>
         </button>
-        <button class="menu-item" data-nav="savings">
-          <div class="ic" style="background:rgba(251,191,36,0.15);color:var(--gold)"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
-          <div class="txt"><div class="t" data-i18n="savingsGoals">সঞ্চয়ের লক্ষ্য</div><div class="s" data-i18n="savingsSub">লক্ষ্য ও অগ্রগতি</div></div>
-          <div class="arrow">›</div>
+        <button class="txn-item" style="width:100%; text-align:left;" onclick="showPage('qibla')">
+          <div class="ic" style="background:rgba(59,130,246,0.15); color:var(--info)">🧭</div>
+          <div class="meta"><div class="title">কিবলা ও তাসবিহ</div></div>
+          <div style="color:var(--text-muted)">›</div>
         </button>
-        <button class="menu-item" data-nav="bills">
-          <div class="ic" style="background:rgba(139,92,246,0.15);color:#c4b5fd"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h4"/></svg></div>
-          <div class="txt"><div class="t" data-i18n="recurringBills">নিয়মিত বিল</div><div class="s" data-i18n="billsSub">আসন্ন বিল রিমাইন্ডার</div></div>
-          <div class="arrow">›</div>
+        <button class="txn-item" style="width:100%; text-align:left;" onclick="enableNotifications()" id="notifyBtn">
+          <div class="ic" style="background:rgba(251,191,36,0.15); color:var(--gold)">🔔</div>
+          <div class="meta"><div class="title">নোটিফিকেশন চালু করুন</div></div>
+          <div style="color:var(--text-muted)">›</div>
         </button>
-        <button class="menu-item" data-nav="settings">
-          <div class="ic" style="background:rgba(148,163,184,0.15);color:#cbd5e1"><svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
-          <div class="txt"><div class="t" data-i18n="settings">সেটিংস</div><div class="s" data-i18n="settingsSub">ভাষা, থিম, ব্যাকআপ</div></div>
-          <div class="arrow">›</div>
-        </button>
-        <button class="menu-item" id="logoutBtn">
-          <div class="ic" style="background:rgba(239,68,68,0.15);color:#fca5a5"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg></div>
-          <div class="txt"><div class="t" data-i18n="logout">লগআউট</div><div class="s" data-i18n="logoutSub">নিরাপদে বের হন</div></div>
-          <div class="arrow">›</div>
+        <button class="txn-item" style="width:100%; text-align:left; border-color:rgba(239,68,68,0.3);" onclick="clearData()">
+          <div class="ic" style="background:rgba(239,68,68,0.15); color:var(--danger)">🗑️</div>
+          <div class="meta"><div class="title" style="color:var(--danger)">সব ডেটা মুছে ফেলুন</div></div>
         </button>
       </div>
-    </section>
-
-    <!-- ============ SETTINGS ============ -->
-    <section class="page" id="page-settings">
-      <div class="section-title"><span data-i18n="settings">সেটিংস</span></div>
-
-      <div class="card">
-        <div class="menu-item" style="border:none;padding:8px 0;margin:0">
-          <div class="ic" style="background:rgba(16,185,129,0.15);color:var(--emerald)"><svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg></div>
-          <div class="txt"><div class="t" data-i18n="language">ভাষা</div><div class="s" id="curLang">বাংলা</div></div>
-          <select class="input" id="langSelect" style="width:auto;padding:8px 10px">
-            <option value="bn">বাংলা</option>
-            <option value="en">English</option>
-          </select>
-        </div>
-        <div class="menu-item" style="border:none;padding:8px 0;margin:0">
-          <div class="ic" style="background:rgba(251,191,36,0.15);color:var(--gold)"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
-          <div class="txt"><div class="t" data-i18n="darkMode">ডার্ক মোড</div><div class="s" data-i18n="darkModeSub">রাতের জন্য আরামদায়ক</div></div>
-          <label class="switch"><input type="checkbox" id="darkToggle" checked><span class="slider"></span></label>
-        </div>
-        <div class="menu-item" style="border:none;padding:8px 0;margin:0">
-          <div class="ic" style="background:rgba(59,130,246,0.15);color:#93c5fd"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
-          <div class="txt"><div class="t" data-i18n="autoLock">অটো-লক</div><div class="s" data-i18n="autoLockSub">৫ মিনিট নিষ্ক্রিয় থাকলে</div></div>
-          <label class="switch"><input type="checkbox" id="autoLockToggle"><span class="slider"></span></label>
-        </div>
-      </div>
-
-      <div class="card mt-16">
-        <div class="section-title"><span data-i18n="dataMgmt">ডেটা ব্যবস্থাপনা</span></div>
-        <button class="menu-item" id="exportJsonBtn" style="width:100%;text-align:left">
-          <div class="ic" style="background:rgba(16,185,129,0.15);color:var(--emerald)"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg></div>
-          <div class="txt"><div class="t" data-i18n="backup">ব্যাকআপ ডাউনলোড (JSON)</div></div>
-        </button>
-        <button class="menu-item" id="importJsonBtn" style="width:100%;text-align:left">
-          <div class="ic" style="background:rgba(59,130,246,0.15);color:#93c5fd"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg></div>
-          <div class="txt"><div class="t" data-i18n="restore">ব্যাকআপ থেকে রিস্টোর</div></div>
-        </button>
-        <input type="file" id="importFile" accept="application/json" class="hidden" />
-        <button class="menu-item" id="clearDataBtn" style="width:100%;text-align:left">
-          <div class="ic" style="background:rgba(239,68,68,0.15);color:#fca5a5"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg></div>
-          <div class="txt"><div class="t text-danger" data-i18n="clearData">সব ডেটা মুছে ফেলুন</div></div>
-        </button>
-      </div>
-
-      <p class="text-muted text-center mt-24" style="font-size:11px" data-i18n="securityNote">
-        🔒 আপনার ডেটা আপনার ব্রাউজারেই সংরক্ষিত। প্রকৃত নিরাপত্তার জন্য Firebase Authentication ব্যবহার করুন।
-      </p>
     </section>
   </main>
 
-  <!-- BOTTOM NAV -->
   <nav class="bottom-nav">
-    <button class="nav-item active" data-nav="home">
-      <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
-      <span data-i18n="navHome">হোম</span>
-    </button>
-    <button class="nav-item" data-nav="transactions">
-      <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M4 7h16M4 12h10M4 17h16"/></svg>
-      <span data-i18n="navTxn">লেনদেন</span>
-    </button>
-    <button class="nav-add" id="navAdd" aria-label="Add">
-      <svg class="icon" style="width:26px;height:26px" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-    </button>
-    <button class="nav-item" data-nav="prayer">
-      <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 3 2 5 3 7v6h8v-6c1-2 3-4 3-7a7 7 0 0 0-7-7z"/></svg>
-      <span data-i18n="navPrayer">নামাজ</span>
-    </button>
-    <button class="nav-item" data-nav="profile">
-      <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v2"/></svg>
-      <span data-i18n="navProfile">প্রোফাইল</span>
-    </button>
+    <button class="nav-item active" onclick="showPage('home')" id="nav-home"><span>🏠</span><span>হোম</span></button>
+    <button class="nav-item" onclick="showPage('transactions')" id="nav-transactions"><span>📋</span><span>লেনদেন</span></button>
+    <button class="nav-add" onclick="openAddModal()">+</button>
+    <button class="nav-item" onclick="showPage('prayer')" id="nav-prayer"><span>🕌</span><span>নামাজ</span></button>
+    <button class="nav-item" onclick="showPage('profile')" id="nav-profile"><span>👤</span><span>প্রোফাইল</span></button>
   </nav>
 </div>
 
-<!-- ============ ADD MODAL ============ -->
 <div class="modal-backdrop" id="addModal">
   <div class="modal">
-    <div class="handle"></div>
-    <div class="m-title" id="addModalTitle">নতুন লেনদেন</div>
-
-    <div class="type-toggle" id="typeToggle">
-      <button class="active expense" data-type="expense">খরচ</button>
-      <button data-type="income">আয়</button>
+    <div style="width:40px; height:4px; background:var(--navy-600); border-radius:4px; margin:0 auto 16px;"></div>
+    <h3 style="margin-bottom:16px;">নতুন লেনদেন</h3>
+    <div class="flex gap-8" style="margin-bottom:16px;">
+      <button class="btn btn-primary" id="typeExpense" onclick="setType('expense')">খরচ</button>
+      <button class="btn btn-outline" id="typeIncome" onclick="setType('income')">আয়</button>
     </div>
-
     <div class="input-group">
-      <label data-i18n="amount">টাকার পরিমাণ</label>
-      <input class="input" type="number" id="amtInput" placeholder="0" min="0" step="1" inputmode="numeric" />
+      <label>টাকার পরিমাণ</label>
+      <input class="input" type="number" id="amtInput" placeholder="0" />
     </div>
-
-    <div class="input-group" id="catGroup">
-      <label data-i18n="category">ক্যাটাগরি</label>
+    <div class="input-group">
+      <label>ক্যাটাগরি</label>
       <div class="cat-grid" id="catGrid"></div>
     </div>
-
     <div class="input-group">
-      <label data-i18n="date">তারিখ</label>
-      <input class="input" type="date" id="dateInput" />
+      <label>নোট (ঐচ্ছিক)</label>
+      <input class="input" type="text" id="noteInput" placeholder="বিস্তারিত..." />
     </div>
-
-    <div class="input-group">
-      <label data-i18n="note">নোট (ঐচ্ছিক)</label>
-      <textarea class="input" id="noteInput" placeholder="..." rows="2"></textarea>
-    </div>
-
-    <div class="flex gap-8">
-      <button class="btn btn-outline" id="addCancel" data-i18n="cancel">বাতিল</button>
-      <button class="btn btn-primary" id="addSave" data-i18n="save">সংরক্ষণ</button>
+    <div class="flex gap-8 mt-16">
+      <button class="btn btn-outline" onclick="closeModal('addModal')">বাতিল</button>
+      <button class="btn btn-primary" onclick="saveTxn()">সংরক্ষণ</button>
     </div>
   </div>
 </div>
 
-<!-- ============ GOAL MODAL ============ -->
-<div class="modal-backdrop" id="goalModal">
-  <div class="modal">
-    <div class="handle"></div>
-    <div class="m-title">নতুন সঞ্চয়ের লক্ষ্য</div>
-    <div class="input-group">
-      <label data-i18n="goalName">লক্ষ্যের নাম</label>
-      <input class="input" type="text" id="goalName" placeholder="যেমন: হজ্জ, ল্যাপটপ, ইমার্জেন্সি ফান্ড" />
-    </div>
-    <div class="input-group">
-      <label data-i18n="targetAmount">লক্ষ্য পরিমাণ</label>
-      <input class="input" type="number" id="goalAmount" placeholder="50000" inputmode="numeric" />
-    </div>
-    <div class="input-group">
-      <label data-i18n="deadline">সময়সীমা (ঐচ্ছিক)</label>
-      <input class="input" type="date" id="goalDeadline" />
-    </div>
-    <div class="flex gap-8">
-      <button class="btn btn-outline" id="goalCancel" data-i18n="cancel">বাতিল</button>
-      <button class="btn btn-primary" id="goalSave" data-i18n="save">সংরক্ষণ</button>
-    </div>
-  </div>
-</div>
-
-<!-- ============ DEPOSIT MODAL ============ -->
-<div class="modal-backdrop" id="depositModal">
-  <div class="modal">
-    <div class="handle"></div>
-    <div class="m-title" id="depositTitle">সঞ্চয়ে জমা</div>
-    <div class="input-group">
-      <label data-i18n="amount">টাকার পরিমাণ</label>
-      <input class="input" type="number" id="depositAmt" placeholder="0" inputmode="numeric" />
-    </div>
-    <div class="flex gap-8">
-      <button class="btn btn-outline" id="depositWithdraw" data-i18n="withdraw">উত্তোলন</button>
-      <button class="btn btn-primary" id="depositAdd" data-i18n="deposit">জমা</button>
-    </div>
-  </div>
-</div>
-
-<!-- ============ BILL MODAL ============ -->
-<div class="modal-backdrop" id="billModal">
-  <div class="modal">
-    <div class="handle"></div>
-    <div class="m-title">নতুন বিল</div>
-    <div class="input-group">
-      <label data-i18n="billName">বিলের নাম</label>
-      <input class="input" type="text" id="billName" placeholder="বাড়িভাড়া / ইন্টারনেট" />
-    </div>
-    <div class="input-group">
-      <label data-i18n="amount">পরিমাণ</label>
-      <input class="input" type="number" id="billAmount" placeholder="0" inputmode="numeric" />
-    </div>
-    <div class="input-group">
-      <label data-i18n="dueDay">মাসের কোন তারিখে পরিশোধ</label>
-      <input class="input" type="number" id="billDay" min="1" max="31" placeholder="5" />
-    </div>
-    <div class="flex gap-8">
-      <button class="btn btn-outline" id="billCancel" data-i18n="cancel">বাতিল</button>
-      <button class="btn btn-primary" id="billSave" data-i18n="save">সংরক্ষণ</button>
-    </div>
-  </div>
-</div>
-
-<!-- ============ BUDGET MODAL ============ -->
 <div class="modal-backdrop" id="budgetModal">
   <div class="modal">
-    <div class="handle"></div>
-    <div class="m-title">মাসিক বাজেট সেট করুন</div>
+    <div style="width:40px; height:4px; background:var(--navy-600); border-radius:4px; margin:0 auto 16px;"></div>
+    <h3 style="margin-bottom:16px;">মাসিক বাজেট সেট করুন</h3>
     <div class="input-group">
-      <label data-i18n="monthlyBudgetAmt">মাসিক বাজেট পরিমাণ</label>
-      <input class="input" type="number" id="budgetAmt" placeholder="20000" inputmode="numeric" />
+      <label>বাজেট পরিমাণ</label>
+      <input class="input" type="number" id="budgetAmtInput" placeholder="20000" />
     </div>
-    <div class="flex gap-8">
-      <button class="btn btn-outline" id="budgetCancel" data-i18n="cancel">বাতিল</button>
-      <button class="btn btn-primary" id="budgetSave" data-i18n="save">সংরক্ষণ</button>
+    <div class="flex gap-8 mt-16">
+      <button class="btn btn-outline" onclick="closeModal('budgetModal')">বাতিল</button>
+      <button class="btn btn-primary" onclick="saveBudget()">সংরক্ষণ</button>
     </div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
-<script>
-/* ============================================================
-   Barakah — Personal Finance & Islamic Lifestyle
-   Vanilla JS prototype
-   ============================================================ */
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
 
-// ---------- i18n ----------
-const I18N = {
-  bn: {
-    splashSub: "Personal Finance & Islamic Lifestyle",
-    authBrand: "আপনার আর্থিক ও ইসলামিক জীবনসঙ্গী",
-    login: "লগইন", register: "রেজিস্ট্রেশন",
-    emailOrPhone: "ইমেইল বা মোবাইল নম্বর", password: "পাসওয়ার্ড",
-    loginBtn: "লগইন করুন", registerBtn: "অ্যাকাউন্ট তৈরি করুন",
-    fullName: "পূর্ণ নাম", pin4: "৪ সংখ্যার PIN (দ্রুত লগইনের জন্য)",
-    forgot: "পাসওয়ার্ড ভুলে গেছেন?",
-    currentBalance: "বর্তমান ব্যালেন্স", todayExpense: "আজকের খরচ", monthExpense: "এই মাসের খরচ",
-    income: "আয়", expense: "খরচ", budgetLeft: "বাজেট বাকি", savings: "সঞ্চয়",
-    loading: "লোড হচ্ছে...", nextPrayer: "পরবর্তী নামাজ",
-    navHome: "হোম", navTxn: "লেনদেন", navPrayer: "নামাজ", navProfile: "প্রোফাইল",
-    navReports: "রিপোর্ট", navSavings: "সঞ্চয়", navQibla: "কিবলা", navChallenge: "চ্যালেঞ্জ",
-    navBills: "বিল", navSettings: "সেটিংস",
-    recentTxns: "সাম্প্রতিক লেনদেন", seeAll: "সব দেখুন",
-    savingsProgress: "সঞ্চয়ের অগ্রগতি", allTxns: "সকল লেনদেন",
-    fAll: "সব", fIncome: "আয়", fExpense: "খরচ", fToday: "আজ", fWeek: "সপ্তাহ", fMonth: "মাস",
-    searchPh: "খুঁজুন...", dailyAmal: "দৈনিক আমল চেকলিস্ট",
-    qiblaDir: "কিবলার দিক", qiblaHint: "কিবলার দিক লোড হচ্ছে...",
-    digitalTasbih: "ডিজিটাল তাসবিহ", target: "লক্ষ্য:", reset: "রিসেট", change: "লক্ষ্য পরিবর্তন",
-    budgetAndReports: "বাজেট ও রিপোর্ট", monthlyBudget: "মাসিক বাজেট",
-    edit: "সম্পাদনা", used: "ব্যবহৃত:", total: "মোট:",
-    categoryBreakdown: "ক্যাটাগরি অনুযায়ী খরচ", incomeVsExpense: "আয় বনাম খরচ",
-    savingsGoals: "সঞ্চয়ের লক্ষ্য", new: "নতুন",
-    dailyChallenge: "দৈনিক চ্যালেঞ্জ", daysStreak: "দিনের স্ট্রিক",
-    todaysTasks: "আজকের কাজ", noSpendCalendar: "No-Spend ক্যালেন্ডার",
-    spent: "খরচ হয়েছে", recurringBills: "নিয়মিত বিল",
-    settings: "সেটিংস", language: "ভাষা", darkMode: "ডার্ক মোড",
-    darkModeSub: "রাতের জন্য আরামদায়ক", autoLock: "অটো-লক",
-    autoLockSub: "৫ মিনিট নিষ্ক্রিয় থাকলে", dataMgmt: "ডেটা ব্যবস্থাপনা",
-    backup: "ব্যাকআপ ডাউনলোড (JSON)", restore: "ব্যাকআপ থেকে রিস্টোর",
-    clearData: "সব ডেটা মুছে ফেলুন", logout: "লগআউট", logoutSub: "নিরাপদে বের হন",
-    budgetSub: "মাসিক বাজেট ও চার্ট", savingsSub: "লক্ষ্য ও অগ্রগতি",
-    billsSub: "আসন্ন বিল রিমাইডার", settingsSub: "ভাষা, থিম, ব্যাকআপ",
-    amount: "টাকার পরিমাণ", category: "ক্যাটাগরি", date: "তারিখ",
-    note: "নোট (ঐচ্ছিক)", cancel: "বাতিল", save: "সংরক্ষণ",
-    goalName: "লক্ষ্যের নাম", targetAmount: "লক্ষ্য পরিমাণ", deadline: "সময়সীমা (ঐচ্ছিক)",
-    withdraw: "উত্তোলন", deposit: "জমা",
-    billName: "বিলের নাম", dueDay: "মাসের কোন তারিখে পরিশোধ",
-    monthlyBudgetAmt: "মাসিক বাজেট পরিমাণ",
-    securityNote: "🔒 আপনার ডেটা আপনার ব্রাউজারেই সংরক্ষিত। প্রকৃত নিরাপত্তার জন্য Firebase Authentication ব্যবহার করুন।",
-    noTxn: "কোনো লেনদেন নেই", noGoal: "কোনো লক্ষ্য নেই",
-    deleteConfirm: "আপনি কি নিশ্চিত? এটি মুছে ফেলা হবে।",
-    saved: "সংরক্ষণ হয়েছে", deleted: "মুছে ফেলা হয়েছে",
-    fillAll: "সব ঘর পূরণ করুন", invalidLogin: "ভুল তথ্য", loginSuccess: "স্বাগতম!",
-    registered: "অ্যাকাউন্ট তৈরি হয়েছে", alreadyExists: "এই অ্যাকাউন্ট আগেই আছে",
-    budgetSaved: "বাজেট সংরক্ষিত", budgetWarning: "⚠️ বাজেটের ৮০% শেষ!",
-    budgetExceeded: "🚨 বাজেট শেষ!",
-    pinWrong: "ভুল PIN", loggedOut: "লগআউট হয়েছে",
-    txnSaved: "লেনদেন সংরক্ষিত", goalSaved: "লক্ষ্য সংরক্ষিত",
-    billSaved: "বিল সংরক্ষিত", depositAdded: "জমা সফল",
-    insufficient: "পর্যাপ্ত টাকা নেই", welcome: "আসসালামু আলাইকুম",
-  },
-  en: {
-    splashSub: "Personal Finance & Islamic Lifestyle",
-    authBrand: "Your financial & Islamic life companion",
-    login: "Login", register: "Register",
-    emailOrPhone: "Email or Mobile", password: "Password",
-    loginBtn: "Login", registerBtn: "Create Account",
-    fullName: "Full Name", pin4: "4-digit PIN (for quick login)",
-    forgot: "Forgot password?",
-    currentBalance: "Current Balance", todayExpense: "Today's Expense", monthExpense: "This Month",
-    income: "Income", expense: "Expense", budgetLeft: "Budget Left", savings: "Savings",
-    loading: "Loading...", nextPrayer: "Next Prayer",
-    navHome: "Home", navTxn: "Transactions", navPrayer: "Prayer", navProfile: "Profile",
-    navReports: "Reports", navSavings: "Savings", navQibla: "Qibla", navChallenge: "Challenge",
-    navBills: "Bills", navSettings: "Settings",
-    recentTxns: "Recent Transactions", seeAll: "See All",
-    savingsProgress: "Savings Progress", allTxns: "All Transactions",
-    fAll: "All", fIncome: "Income", fExpense: "Expense", fToday: "Today", fWeek: "Week", fMonth: "Month",
-    searchPh: "Search...", dailyAmal: "Daily Amal Checklist",
-    qiblaDir: "Qibla Direction", qiblaHint: "Loading Qibla direction...",
-    digitalTasbih: "Digital Tasbih", target: "Target:", reset: "Reset", change: "Change Target",
-    budgetAndReports: "Budget & Reports", monthlyBudget: "Monthly Budget",
-    edit: "Edit", used: "Used:", total: "Total:",
-    categoryBreakdown: "Category Breakdown", incomeVsExpense: "Income vs Expense",
-    savingsGoals: "Savings Goals", new: "New",
-    dailyChallenge: "Daily Challenge", daysStreak: "day streak",
-    todaysTasks: "Today's Tasks", noSpendCalendar: "No-Spend Calendar",
-    spent: "Spent", recurringBills: "Recurring Bills",
-    settings: "Settings", language: "Language", darkMode: "Dark Mode",
-    darkModeSub: "Comfortable for eyes", autoLock: "Auto-Lock",
-    autoLockSub: "After 5 min idle", dataMgmt: "Data Management",
-    backup: "Download Backup (JSON)", restore: "Restore from Backup",
-    clearData: "Clear All Data", logout: "Logout", logoutSub: "Sign out safely",
-    budgetSub: "Monthly budget & charts", savingsSub: "Goals & progress",
-    billsSub: "Upcoming reminders", settingsSub: "Language, theme, backup",
-    amount: "Amount", category: "Category", date: "Date",
-    note: "Note (optional)", cancel: "Cancel", save: "Save",
-    goalName: "Goal Name", targetAmount: "Target Amount", deadline: "Deadline (optional)",
-    withdraw: "Withdraw", deposit: "Deposit",
-    billName: "Bill Name", dueDay: "Due day of month",
-    monthlyBudgetAmt: "Monthly Budget Amount",
-    securityNote: "🔒 Your data is stored locally. For real security use Firebase Authentication.",
-    noTxn: "No transactions", noGoal: "No goals",
-    deleteConfirm: "Are you sure? This will be deleted.",
-    saved: "Saved", deleted: "Deleted",
-    fillAll: "Fill all fields", invalidLogin: "Invalid credentials", loginSuccess: "Welcome!",
-    registered: "Account created", alreadyExists: "Account already exists",
-    budgetSaved: "Budget saved", budgetWarning: "⚠️ 80% of budget used!",
-    budgetExceeded: "🚨 Budget exceeded!",
-    pinWrong: "Wrong PIN", loggedOut: "Logged out",
-    txnSaved: "Transaction saved", goalSaved: "Goal saved",
-    billSaved: "Bill saved", depositAdded: "Deposit successful",
-    insufficient: "Insufficient funds", welcome: "Assalamu Alaikum",
+  const firebaseConfig = {
+    apiKey: "AIzaSyC8qsIkX_LAYl1yVxsD1wBGOx7PBdoXmxk",
+    authDomain: "barakah-8f301.firebaseapp.com",
+    projectId: "barakah-8f301",
+    storageBucket: "barakah-8f301.firebasestorage.app",
+    messagingSenderId: "280558001853",
+    appId: "1:280558001853:web:d2980d53555cdb36fba1d4"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const messaging = getMessaging(app);
+  const VAPID_KEY = "BH6Owo2fsuMMTJ8M8297MuoXagB-NNdUcB6DMe-RGhMbvc79q7T3gl3sGzI6PphaiQij1uveei3-v-JJe81JKdo";
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('firebase-messaging-sw.js').catch(err => console.log('SW error:', err));
   }
-};
 
-// ---------- state ----------
-const STORE_KEY = 'barakah_v1';
-let state = {
-  user: null,
-  txns: [],
-  goals: [],
-  bills: [],
-  budget: 0,
-  streak: 0,
-  lastDone: null,
-  noSpendDays: [],
-  amal: {},
-  tasbih: { count: 0, target: 33 },
-  lang: 'bn',
-  theme: 'dark',
-};
-let addState = { type: 'expense', category: 'food' };
-let depositGoalId = null;
-let currentFilter = 'all';
-let catChartInst, ieChartInst;
+  let currentUser = null;
+  let state = { txns: [], budget: 0, theme: 'dark', tasbih: { count: 0, target: 33 } };
+  let addType = 'expense', addCat = 'food';
+  let catChartInst = null;
+  let prayerData = null;
+  let prayerTimer = null;
 
-// ---------- categories ----------
-const CATEGORIES = [
-  { id: 'food',        bn: 'খাবার',     en: 'Food',       color: '#10b981', icon: '🍽️' },
-  { id: 'transport',   bn: 'যাতায়াত',   en: 'Transport',  color: '#3b82f6', icon: '🚌' },
-  { id: 'bazar',       bn: 'বাজার',     en: 'Grocery',    color: '#f59e0b', icon: '🛒' },
-  { id: 'bill',        bn: 'বিল',       en: 'Bills',      color: '#ef4444', icon: '💡' },
-  { id: 'education',   bn: 'শিক্ষা',    en: 'Education',  color: '#8b5cf6', icon: '📚' },
-  { id: 'health',      bn: 'স্বাস্থ্য',  en: 'Health',     color: '#ec4899', icon: '🏥' },
-  { id: 'shopping',    bn: 'শপিং',      en: 'Shopping',   color: '#06b6d4', icon: '🛍️' },
-  { id: 'other',       bn: 'অন্যান্য',  en: 'Other',      color: '#94a3b8', icon: '📦' },
-];
-const INCOME_CATS = [
-  { id: 'salary',   bn: 'বেতন',      en: 'Salary',    color: '#10b981', icon: '💼' },
-  { id: 'business', bn: 'ব্যবসা',    en: 'Business',  color: '#3b82f6', icon: '📈' },
-  { id: 'gift',     bn: 'উপহার',     en: 'Gift',      color: '#f59e0b', icon: '🎁' },
-  { id: 'other',    bn: 'অন্যান্য',  en: 'Other',     color: '#94a3b8', icon: '📦' },
-];
-
-// ---------- helpers ----------
-const $ = (s, el = document) => el.querySelector(s);
-const $$ = (s, el = document) => [...el.querySelectorAll(s)];
-const t = (k) => (I18N[state.lang] && I18N[state.lang][k]) || k;
-const fmtMoney = (n) => '৳ ' + Number(n || 0).toLocaleString('en-IN', { maximumFractionDigits: 0 });
-const todayStr = () => new Date().toISOString().slice(0, 10);
-const monthKey = (d = new Date()) => d.toISOString().slice(0, 7);
-function save() { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
-function load() {
-  try {
-    const raw = localStorage.getItem(STORE_KEY);
-    if (raw) state = { ...state, ...JSON.parse(raw) };
-  } catch (e) {}
-}
-function toast(msg, isErr = false) {
-  const el = $('#toast');
-  el.textContent = msg;
-  el.classList.toggle('error', isErr);
-  el.classList.add('show');
-  clearTimeout(el._t);
-  el._t = setTimeout(() => el.classList.remove('show'), 2200);
-}
-
-// ---------- i18n apply ----------
-function applyLang() {
-  $$('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
-  $$('[data-i18n-ph]').forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
-  document.documentElement.lang = state.lang;
-  $('#langLabel').textContent = state.lang === 'bn' ? 'EN' : 'বাং';
-  $('#langSelect').value = state.lang;
-  $('#curLang').textContent = state.lang === 'bn' ? 'বাংলা' : 'English';
-  renderAll();
-}
-
-// ---------- theme ----------
-function applyTheme() {
-  document.documentElement.setAttribute('data-theme', state.theme);
-  $('#darkToggle').checked = state.theme === 'dark';
-}
-
-// ---------- auth ----------
-function showAuth() {
-  $('#splash').classList.add('hide');
-  $('#authScreen').classList.remove('hidden');
-  $('#app').classList.remove('active');
-}
-function showApp() {
-  $('#splash').classList.add('hide');
-  $('#authScreen').classList.add('hidden');
-  $('#app').classList.add('active');
-  updateGreeting();
-  renderAll();
-}
-function updateGreeting() {
-  const h = new Date().getHours();
-  let greet = state.lang === 'bn'
-    ? (h < 12 ? 'শুভ সকাল' : h < 17 ? 'শুভ অপরাহ্ন' : h < 20 ? 'শুভ সন্ধ্যা' : 'শুভ রাত্রি')
-    : (h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : h < 20 ? 'Good evening' : 'Good night');
-  const name = state.user?.name?.split(' ')[0] || '';
-  $('#greetName').textContent = name ? `${greet}, ${name}` : t('welcome');
-  const d = new Date();
-  const opts = { weekday: 'long', day: 'numeric', month: 'long' };
-  $('#greetDate').textContent = d.toLocaleDateString(state.lang === 'bn' ? 'bn-BD' : 'en-US', opts);
-}
-
-// ---------- nav ----------
-function showPage(name) {
-  $$('.page').forEach(p => p.classList.remove('active'));
-  const pg = $('#page-' + name);
-  if (pg) pg.classList.add('active');
-  $$('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.nav === name));
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  if (name === 'budget') renderCharts();
-  if (name === 'prayer') renderPrayer();
-  if (name === 'qibla') renderQibla();
-  if (name === 'challenge') renderChallenge();
-  if (name === 'bills') renderBills();
-  if (name === 'savings') renderGoals();
-}
-
-// ---------- txn rendering ----------
-function catInfo(id, type = 'expense') {
-  const list = type === 'income' ? INCOME_CATS : CATEGORIES;
-  return list.find(c => c.id === id) || list[list.length - 1];
-}
-
-function txnHtml(txn, showDelete = false) {
-  const c = catInfo(txn.category, txn.type);
-  const amtClass = txn.type === 'income' ? 'income' : 'expense';
-  const sign = txn.type === 'income' ? '+' : '-';
-  return `
-    <div class="txn-item" data-id="${txn.id}">
-      <div class="ic" style="background:${c.color}20;color:${c.color}">
-        <span style="font-size:20px">${c.icon}</span>
-      </div>
-      <div class="meta">
-        <div class="title">${c[state.lang] || c.en}</div>
-        <div class="sub">${txn.date}${txn.note ? ' · ' + escapeHtml(txn.note) : ''}</div>
-      </div>
-      <div class="amt ${amtClass}">${sign}${fmtMoney(txn.amount)}</div>
-    </div>
-  `;
-}
-function escapeHtml(s) { return String(s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m])); }
-
-function renderHome() {
-  const today = todayStr();
-  const mk = monthKey();
-  const todayExp = state.txns.filter(x => x.type === 'expense' && x.date === today).reduce((a, x) => a + x.amount, 0);
-  const monthExp = state.txns.filter(x => x.type === 'expense' && x.date.startsWith(mk)).reduce((a, x) => a + x.amount, 0);
-  const monthInc = state.txns.filter(x => x.type === 'income' && x.date.startsWith(mk)).reduce((a, x) => a + x.amount, 0);
-  const totalInc = state.txns.filter(x => x.type === 'income').reduce((a, x) => a + x.amount, 0);
-  const totalExp = state.txns.filter(x => x.type === 'expense').reduce((a, x) => a + x.amount, 0);
-  const bal = totalInc - totalExp;
-  const budgetLeft = Math.max(0, state.budget - monthExp);
-  const totalSavings = state.goals.reduce((a, g) => a + g.saved, 0);
-
-  $('#balanceAmount').textContent = fmtMoney(bal);
-  $('#todayExpense').textContent = fmtMoney(todayExp);
-  $('#monthExpense').textContent = fmtMoney(monthExp);
-  $('#homeIncome').textContent = fmtMoney(monthInc);
-  $('#homeExpense').textContent = fmtMoney(monthExp);
-  $('#budgetLeft').textContent = fmtMoney(budgetLeft);
-  $('#homeSavings').textContent = fmtMoney(totalSavings);
-
-  const recent = [...state.txns].sort((a, b) => b.id - a.id).slice(0, 5);
-  $('#recentTxns').innerHTML = recent.length
-    ? recent.map(x => txnHtml(x)).join('')
-    : `<div class="text-center text-muted" style="padding:24px">${t('noTxn')}</div>`;
-
-  const goals = state.goals.slice(0, 2);
-  $('#homeGoals').innerHTML = goals.length
-    ? goals.map(goalHtml).join('')
-    : `<div class="text-center text-muted" style="padding:24px">${t('noGoal')}</div>`;
-}
-
-function renderTransactions() {
-  let list = [...state.txns].sort((a, b) => b.id - a.id);
-  const today = todayStr();
-  const now = new Date();
-
-  if (currentFilter === 'income') list = list.filter(x => x.type === 'income');
-  else if (currentFilter === 'expense') list = list.filter(x => x.type === 'expense');
-  else if (currentFilter === 'today') list = list.filter(x => x.date === today);
-  else if (currentFilter === 'week') {
-    const w = new Date(); w.setDate(w.getDate() - 7);
-    list = list.filter(x => new Date(x.date) >= w);
-  } else if (currentFilter === 'month') list = list.filter(x => x.date.startsWith(monthKey()));
-
-  const q = ($('#txnSearch').value || '').trim().toLowerCase();
-  if (q) list = list.filter(x => (x.note || '').toLowerCase().includes(q) || String(x.amount).includes(q));
-
-  $('#allTxns').innerHTML = list.length
-    ? list.map(x => txnHtml(x)).join('')
-    : `<div class="text-center text-muted" style="padding:40px">${t('noTxn')}</div>`;
-}
-
-function goalHtml(g) {
-  const pct = Math.min(100, Math.round((g.saved / g.target) * 100));
-  return `
-    <div class="goal-card" data-gid="${g.id}">
-      <div class="head">
-        <div>
-          <div class="name">${escapeHtml(g.name)}</div>
-          <div class="meta">${g.deadline ? '🎯 ' + g.deadline : ''}</div>
-        </div>
-        <div class="badge ${pct >= 100 ? 'badge-emerald' : 'badge-gold'}">${pct}%</div>
-      </div>
-      <div class="progress"><div class="bar" style="width:${pct}%"></div></div>
-      <div class="amounts">
-        <span><span data-i18n="savedLbl">জমা:</span> <strong>${fmtMoney(g.saved)}</strong></span>
-        <span><span data-i18n="targetLbl">লক্ষ্য:</span> <strong>${fmtMoney(g.target)}</strong></span>
-      </div>
-      <button class="btn btn-primary btn-sm mt-8" style="width:100%" data-deposit="${g.id}">
-        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> জমা / উত্তোলন
-      </button>
-    </div>
-  `;
-}
-
-function renderGoals() {
-  $('#goalsList').innerHTML = state.goals.length
-    ? state.goals.map(goalHtml).join('')
-    : `<div class="text-center text-muted" style="padding:40px">${t('noGoal')}</div>`;
-}
-
-function renderBills() {
-  if (!state.bills.length) {
-    $('#billsList').innerHTML = `<div class="text-center text-muted" style="padding:40px">কোনো বিল নেই</div>`;
-    return;
-  }
-  $('#billsList').innerHTML = state.bills.map(b => `
-    <div class="bill-item">
-      <div class="ic" style="background:rgba(251,191,36,0.15);color:var(--gold)">💡</div>
-      <div class="meta">
-        <div class="t">${escapeHtml(b.name)}</div>
-        <div class="d">প্রতি মাসের ${b.day} তারিখে</div>
-      </div>
-      <div class="amt">${fmtMoney(b.amount)}</div>
-    </div>
-  `).join('');
-}
-
-function renderChallenge() {
-  $('#streakNum').textContent = state.streak;
-  const today = todayStr();
-  const done = state.lastDone === today;
-  const tasks = [
-    { id: 'txn', bn: 'আজকের সব খরচ লিপিবদ্ধ', en: 'Log all today expenses', done: state.txns.some(x => x.date === today) },
-    { id: 'prayer', bn: '৫ ওয়াক্ত নামাজ', en: '5 daily prayers', done: state.amal[today + '_prayer'] },
-    { id: 'quran', bn: 'কুরআন তিলাওয়াত', en: 'Quran recitation', done: state.amal[today + '_quran'] },
-    { id: 'tasbih', bn: 'তাসবিহ ৩৩ বার', en: 'Tasbih 33 times', done: state.tasbih.count >= 33 },
+  const CATEGORIES = [
+    { id: 'food', bn: 'খাবার', icon: '🍽️' }, { id: 'transport', bn: 'যাতায়াত', icon: '🚌' },
+    { id: 'bill', bn: 'বিল', icon: '💡' }, { id: 'other', bn: 'অন্যান্য', icon: '📦' },
+    { id: 'salary', bn: 'বেতন', icon: '💼' }
   ];
-  $('#challengeTasks').innerHTML = tasks.map(task => `
-    <label class="menu-item" style="cursor:pointer">
-      <div class="ic" style="background:${task.done ? 'rgba(16,185,129,0.15)' : 'rgba(148,163,184,0.1)'};color:${task.done ? 'var(--emerald)' : 'var(--text-muted)'}">
-        ${task.done ? '✓' : '○'}
-      </div>
-      <div class="txt"><div class="t">${state.lang === 'bn' ? task.bn : task.en}</div></div>
-      <label class="switch" onclick="event.stopPropagation()">
-        <input type="checkbox" data-task="${task.id}" ${task.done ? 'checked' : ''}>
-        <span class="slider"></span>
-      </label>
-    </label>
-  `).join('');
 
-  // calendar
-  const now = new Date();
-  const year = now.getFullYear(), mon = now.getMonth();
-  const firstDay = new Date(year, mon, 1).getDay();
-  const days = new Date(year, mon + 1, 0).getDate();
-  let html = '';
-  for (let i = 0; i < firstDay; i++) html += '<div class="cal-cell" style="background:transparent"></div>';
-  for (let d = 1; d <= days; d++) {
-    const ds = `${year}-${String(mon + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-    const spent = state.txns.some(x => x.date === ds && x.type === 'expense');
-    const noSpend = state.noSpendDays.includes(ds);
-    const today = ds === todayStr();
-    let cls = 'cal-cell';
-    if (spent) cls += ' done';
-    if (noSpend) cls += ' nospend';
-    if (today) cls += ' today';
-    html += `<div class="${cls}">${d}</div>`;
-  }
-  $('#noSpendCal').innerHTML = html;
-}
-
-// ---------- charts ----------
-function renderCharts() {
-  const mk = monthKey();
-  const monthExp = state.txns.filter(x => x.type === 'expense' && x.date.startsWith(mk));
-  const totalBudgetUsed = monthExp.reduce((a, x) => a + x.amount, 0);
-  const pct = state.budget > 0 ? Math.min(100, (totalBudgetUsed / state.budget) * 100) : 0;
-  $('#budgetUsed').textContent = fmtMoney(totalBudgetUsed);
-  $('#budgetTotal').textContent = fmtMoney(state.budget);
-  $('#budgetBar').style.width = pct + '%';
-  let warn = '';
-  if (state.budget > 0) {
-    if (totalBudgetUsed >= state.budget) warn = t('budgetExceeded');
-    else if (pct >= 80) warn = t('budgetWarning');
-  }
-  $('#budgetWarn').textContent = warn;
-
-  // category chart
-  const catTotals = {};
-  monthExp.forEach(x => { catTotals[x.category] = (catTotals[x.category] || 0) + x.amount; });
-  const labels = Object.keys(catTotals).map(k => catInfo(k)[state.lang] || k);
-  const data = Object.values(catTotals);
-  const colors = Object.keys(catTotals).map(k => catInfo(k).color);
-
-  if (catChartInst) catChartInst.destroy();
-  catChartInst = new Chart($('#catChart'), {
-    type: 'doughnut',
-    data: { labels: labels.length ? labels : ['—'], datasets: [{ data: data.length ? data : [1], backgroundColor: colors.length ? colors : ['#334155'], borderWidth: 0 }] },
-    options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 11 } } } } }
-  });
-
-  // income vs expense (last 6 months)
-  const months = [];
-  const incData = [], expData = [];
-  for (let i = 5; i >= 0; i--) {
-    const d = new Date(); d.setMonth(d.getMonth() - i);
-    const k = d.toISOString().slice(0, 7);
-    months.push(d.toLocaleDateString(state.lang === 'bn' ? 'bn-BD' : 'en-US', { month: 'short' }));
-    incData.push(state.txns.filter(x => x.type === 'income' && x.date.startsWith(k)).reduce((a, x) => a + x.amount, 0));
-    expData.push(state.txns.filter(x => x.type === 'expense' && x.date.startsWith(k)).reduce((a, x) => a + x.amount, 0));
-  }
-  if (ieChartInst) ieChartInst.destroy();
-  ieChartInst = new Chart($('#ieChart'), {
-    type: 'bar',
-    data: { labels: months, datasets: [
-      { label: t('income'), data: incData, backgroundColor: '#10b981', borderRadius: 6 },
-      { label: t('expense'), data: expData, backgroundColor: '#ef4444', borderRadius: 6 },
-    ]},
-    options: {
-      responsive: true,
-      plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 11 } } } },
-      scales: {
-        x: { ticks: { color: '#94a3b8' }, grid: { display: false } },
-        y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148,163,184,0.1)' } }
-      }
-    }
-  });
-}
-
-// ============================================================
-// PRAYER TIMES (AlAdhan API)
-// ============================================================
-let prayerData = null;
-let countdownTimer = null;
-
-async function fetchPrayerTimes() {
-  const city = 'Dhaka', country = 'Bangladesh';
-  try {
-    const url = `https://api.aladhan.com/v1/timingsByCity?country=${country}&city=${city}&method=1`;
-    const res = await fetch(url);
-    const data = await res.json();
-    if (data.code === 200) {
-      prayerData = data.data;
-      renderPrayer();
-      return;
-    }
-  } catch (e) { console.warn('Prayer fetch failed, using fallback', e); }
-  // Fallback static times for demo
-  prayerData = {
-    timings: { Fajr: '05:00', Sunrise: '06:20', Dhuhr: '12:15', Asr: '15:45', Maghrib: '18:20', Isha: '19:40' },
-    date: { readable: '', hijri: { date: '' } },
-  };
-  renderPrayer();
-}
-
-const PRAYERS = [
-  { key: 'Fajr', bn: 'ফজর', ar: 'الفجر' },
-  { key: 'Sunrise', bn: 'সূর্যোদয়', ar: 'الشروق', skip: true },
-  { key: 'Dhuhr', bn: 'যোহর', ar: 'الظهر' },
-  { key: 'Asr', bn: 'আসর', ar: 'العصر' },
-  { key: 'Maghrib', bn: 'মাগরিব', ar: 'المغرب' },
-  { key: 'Isha', bn: 'ইশা', ar: 'العشاء' },
-];
-
-function getNextPrayer() {
-  if (!prayerData) return null;
-  const now = new Date();
-  const list = PRAYERS.filter(p => !p.skip);
-  for (const p of list) {
-    const [h, m] = prayerData.timings[p.key].split(':').map(Number);
-    const dt = new Date(); dt.setHours(h, m, 0, 0);
-    if (dt > now) return { ...p, time: prayerData.timings[p.key], dt };
-  }
-  // tomorrow Fajr
-  const [h, m] = prayerData.timings.Fajr.split(':').map(Number);
-  const dt = new Date(); dt.setDate(dt.getDate() + 1); dt.setHours(h, m, 0, 0);
-  return { ...list[0], time: prayerData.timings.Fajr, dt };
-}
-
-function renderPrayer() {
-  if (!prayerData) return;
-  const next = getNextPrayer();
-  if (next) {
-    $('#nextPrayerName').textContent = next[state.lang] || next.key;
-    $('#nextPrayerTime').textContent = next.time;
-    $('#pHeroName').textContent = next[state.lang] || next.key;
-    $('#pHeroTime').textContent = next.time;
-  }
-
-  $('#prayerList').innerHTML = PRAYERS.map(p => {
-    const isNext = next && next.key === p.key;
-    const time = prayerData.timings[p.key];
-    return `
-      <div class="prayer-row ${isNext ? 'next' : ''}">
-        <div class="n">
-          <div class="dot"></div>
-          <span class="name">${p[state.lang] || p.key}</span>
-          <span class="ar">${p.ar}</span>
-        </div>
-        <div class="t">${time}</div>
-      </div>
-    `;
-  }).join('');
-
-  startCountdown();
-}
-
-function startCountdown() {
-  clearInterval(countdownTimer);
-  const tick = () => {
-    const next = getNextPrayer();
-    if (!next) return;
-    const diff = next.dt - new Date();
-    if (diff <= 0) { fetchPrayerTimes(); return; }
-    const h = Math.floor(diff / 3600000);
-    const m = Math.floor((diff % 3600000) / 60000);
-    const s = Math.floor((diff % 60000) / 1000);
-    const str = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-    $('#nextPrayerCd').textContent = str;
-    $('#pHeroCd').textContent = str;
-  };
-  tick();
-  countdownTimer = setInterval(tick, 1000);
-}
-
-// ============================================================
-// QIBLA (AlAdhan API)
-// ============================================================
-async function renderQibla() {
-  if (!$('#compass').dataset.loaded) {
-    try {
-      const lat = 23.8103, lng = 90.4125;
-      const res = await fetch(`https://api.aladhan.com/v1/qibla/${lat}/${lng}`);
-      const data = await res.json();
-      if (data.code === 200) {
-        const dir = data.data.direction;
-        $('#needle').style.transform = `translateX(-50%) rotate(${dir}deg)`;
-        $('#qiblaInfo').textContent = state.lang === 'bn'
-          ? `কিবলার দিক: ${dir.toFixed(1)}° (উত্তর থেকে ঘড়ির কাঁটার দিকে)`
-          : `Qibla direction: ${dir.toFixed(1)}° (clockwise from North)`;
-        $('#compass').dataset.loaded = '1';
-      }
-    } catch (e) {
-      $('#qiblaInfo').textContent = state.lang === 'bn' ? 'কিবলার দিক লোড করা যায়নি' : 'Could not load Qibla direction';
-    }
-  }
-  // load tasbih
-  $('#tasbihNum').textContent = state.tasbih.count;
-  $('#tasbihTarget').textContent = state.tasbih.target;
-}
-
-// ============================================================
-// AMAL CHECKLIST
-// ============================================================
-const AMAL_ITEMS = [
-  { id: 'fajr', bn: 'ফজরের নামাজ', en: 'Fajr prayer' },
-  { id: 'dhuhr', bn: 'যোহরের নামাজ', en: 'Dhuhr prayer' },
-  { id: 'asr', bn: 'আসরের নামাজ', en: 'Asr prayer' },
-  { id: 'maghrib', bn: 'মাগরিবের নামাজ', en: 'Maghrib prayer' },
-  { id: 'isha', bn: 'ইশার নামাজ', en: 'Isha prayer' },
-  { id: 'quran', bn: 'কুরআন তিলাওয়াত', en: 'Quran recitation' },
-  { id: 'zikr', bn: 'সকাল-সন্ধ্যার জিকির', en: 'Morning/evening zikr' },
-];
-function renderAmal() {
-  const today = todayStr();
-  $('#amalList').innerHTML = AMAL_ITEMS.map(item => {
-    const key = today + '_' + item.id;
-    const done = !!state.amal[key];
-    return `
-      <label class="menu-item" style="cursor:pointer">
-        <div class="ic" style="background:${done ? 'rgba(16,185,129,0.15)' : 'rgba(148,163,184,0.1)'};color:${done ? 'var(--emerald)' : 'var(--text-muted)'}">
-          ${done ? '✓' : '○'}
-        </div>
-        <div class="txt"><div class="t">${state.lang === 'bn' ? item.bn : item.en}</div></div>
-        <label class="switch" onclick="event.stopPropagation()">
-          <input type="checkbox" data-amal="${item.id}" ${done ? 'checked' : ''}>
-          <span class="slider"></span>
-        </label>
-      </label>
-    `;
-  }).join('');
-}
-
-// ============================================================
-// RENDER ALL
-// ============================================================
-function renderAll() {
-  renderHome();
-  renderTransactions();
-  renderGoals();
-  renderBills();
-  renderChallenge();
-  renderAmal();
-  if (prayerData) renderPrayer();
-  if ($('#page-budget').classList.contains('active')) renderCharts();
-  if ($('#page-qibla').classList.contains('active')) renderQibla();
-  // profile
-  if (state.user) {
-    $('#profileName').textContent = state.user.name || 'ব্যবহারকারী';
-    $('#profileEmail').textContent = state.user.id || '—';
-    $('#profileAvatar').textContent = (state.user.name || 'B').charAt(0).toUpperCase();
-  }
-}
-
-// ============================================================
-// EVENT BINDINGS
-// ============================================================
-function bindEvents() {
-  // Auth tabs
-  $('#tabLogin').addEventListener('click', () => {
-    $('#tabLogin').classList.add('active');
-    $('#tabRegister').classList.remove('active');
-    $('#loginForm').classList.remove('hidden');
-    $('#registerForm').classList.add('hidden');
-  });
-  $('#tabRegister').addEventListener('click', () => {
-    $('#tabRegister').classList.add('active');
-    $('#tabLogin').classList.remove('active');
-    $('#registerForm').classList.remove('hidden');
-    $('#loginForm').classList.add('hidden');
-  });
-
-  // Login
-  $('#loginForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const id = $('#loginId').value.trim();
-    const pass = $('#loginPass').value;
-    const users = JSON.parse(localStorage.getItem('barakah_users') || '{}');
-    if (users[id] && users[id].pass === pass) {
-      state.user = { name: users[id].name, id };
-      save();
-      toast(t('loginSuccess'));
-      showApp();
+  onAuthStateChanged(auth, async (user) => {
+    document.getElementById('splash').classList.add('hidden');
+    if (user) {
+      currentUser = user;
+      document.getElementById('authScreen').classList.add('hidden');
+      document.getElementById('app').classList.add('active');
+      document.getElementById('profileEmail').textContent = user.email;
+      await loadData();
+      fetchPrayerTimes();
     } else {
-      toast(t('invalidLogin'), true);
+      currentUser = null;
+      document.getElementById('authScreen').classList.remove('hidden');
+      document.getElementById('app').classList.remove('active');
     }
   });
 
-  // Register
-  $('#registerForm').addEventListener('submit', (e) => {
+  document.getElementById('tabLogin').onclick = () => {
+    document.getElementById('tabLogin').classList.add('active');
+    document.getElementById('tabRegister').classList.remove('active');
+    document.getElementById('loginForm').classList.remove('hidden');
+    document.getElementById('registerForm').classList.add('hidden');
+  };
+  document.getElementById('tabRegister').onclick = () => {
+    document.getElementById('tabRegister').classList.add('active');
+    document.getElementById('tabLogin').classList.remove('active');
+    document.getElementById('registerForm').classList.remove('hidden');
+    document.getElementById('loginForm').classList.add('hidden');
+  };
+
+  document.getElementById('registerForm').onsubmit = async (e) => {
     e.preventDefault();
-    const name = $('#regName').value.trim();
-    const id = $('#regId').value.trim();
-    const pass = $('#regPass').value;
-    const pin = $('#regPin').value.trim();
-    if (!name || !id || !pass || pin.length !== 4) { toast(t('fillAll'), true); return; }
-    const users = JSON.parse(localStorage.getItem('barakah_users') || '{}');
-    if (users[id]) { toast(t('alreadyExists'), true); return; }
-    users[id] = { name, pass, pin };
-    localStorage.setItem('barakah_users', JSON.stringify(users));
-    state.user = { name, id };
-    save();
-    toast(t('registered'));
-    showApp();
-  });
+    try {
+      const cred = await createUserWithEmailAndPassword(auth, document.getElementById('regEmail').value, document.getElementById('regPass').value);
+      await setDoc(doc(db, "users", cred.user.uid), { name: document.getElementById('regName').value, email: cred.user.email, state: state });
+      toast('অ্যাকাউন্ট তৈরি হয়েছে!');
+    } catch (err) { toast(err.message, true); }
+  };
 
-  $('#forgotBtn').addEventListener('click', () => {
-    toast(state.lang === 'bn' ? 'পাসওয়ার্ড রিসেট লিংক (Firebase যুক্ত হলে কাজ করবে)' : 'Reset link (works with Firebase)');
-  });
+  document.getElementById('loginForm').onsubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await signInWithEmailAndPassword(auth, document.getElementById('loginEmail').value, document.getElementById('loginPass').value);
+    } catch (err) { toast('ভুল ইমেইল বা পাসওয়ার্ড', true); }
+  };
 
-  // Theme
-  $('#themeToggle').addEventListener('click', () => {
-    state.theme = state.theme === 'dark' ? 'light' : 'dark';
-    applyTheme(); save();
-  });
-  $('#darkToggle').addEventListener('change', (e) => {
-    state.theme = e.target.checked ? 'dark' : 'light';
-    applyTheme(); save();
-  });
+  window.logout = () => signOut(auth);
 
-  // Lang
-  $('#langToggle').addEventListener('click', () => {
-    state.lang = state.lang === 'bn' ? 'en' : 'bn';
-    applyLang(); save();
-  });
-  $('#langSelect').addEventListener('change', (e) => {
-    state.lang = e.target.value;
-    applyLang(); save();
-  });
-
-  // Nav
-  $$('[data-nav]').forEach(el => {
-    el.addEventListener('click', () => showPage(el.dataset.nav));
-  });
-
-  // Add modal
-  $('#navAdd').addEventListener('click', () => openAddModal());
-  $('#addCancel').addEventListener('click', () => $('#addModal').classList.remove('active'));
-  $('#addModal').addEventListener('click', (e) => { if (e.target.id === 'addModal') e.currentTarget.classList.remove('active'); });
-
-  // Type toggle
-  $$('#typeToggle button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      $$('#typeToggle button').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      addState.type = btn.dataset.type;
-      addState.category = addState.type === 'expense' ? 'food' : 'salary';
-      renderCatGrid();
-    });
-  });
-
-  // Save txn
-  $('#addSave').addEventListener('click', () => {
-    const amt = parseFloat($('#amtInput').value);
-    const date = $('#dateInput').value || todayStr();
-    const note = $('#noteInput').value.trim();
-    if (!amt || amt <= 0) { toast(t('fillAll'), true); return; }
-    const txn = {
-      id: Date.now(),
-      type: addState.type,
-      amount: amt,
-      category: addState.category,
-      date,
-      note,
-    };
-    state.txns.push(txn);
-    // Challenge: mark done
-    if (state.lastDone !== todayStr()) {
-      state.lastDone = todayStr();
-      state.streak = (state.streak || 0) + 1;
+  async function loadData() {
+    const docSnap = await getDoc(doc(db, "users", currentUser.uid));
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      if(data.state) state = { ...state, ...data.state };
+      if(!state.tasbih) state.tasbih = { count: 0, target: 33 };
+      document.getElementById('profileName').textContent = data.name || 'ব্যবহারকারী';
+      document.getElementById('profileAvatar').textContent = (data.name || 'B').charAt(0).toUpperCase();
+      document.documentElement.setAttribute('data-theme', state.theme);
+      document.getElementById('themeBtn').textContent = state.theme === 'dark' ? '🌙' : '☀️';
+      renderAll();
     }
-    // No-spend check
-    const ts = todayStr();
-    const hasExpenseToday = state.txns.some(x => x.type === 'expense' && x.date === ts);
-    if (!hasExpenseToday && !state.noSpendDays.includes(ts)) state.noSpendDays.push(ts);
-    save();
-    toast(t('txnSaved'));
-    $('#addModal').classList.remove('active');
-    $('#amtInput').value = ''; $('#noteInput').value = '';
-    renderAll();
-  });
+  }
 
-  // Filter chips
-  $$('#filterChips .chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      $$('#filterChips .chip').forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      currentFilter = chip.dataset.filter;
-      renderTransactions();
-    });
-  });
-  $('#txnSearch').addEventListener('input', renderTransactions);
+  async function saveData() {
+    if (currentUser) await updateDoc(doc(db, "users", currentUser.uid), { state: state });
+  }
 
-  // Export CSV
-  $('#exportCsvBtn').addEventListener('click', exportCsv);
+  window.showPage = (page) => {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(`page-${page}`).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    if(document.getElementById(`nav-${page}`)) document.getElementById(`nav-${page}`).classList.add('active');
+    if(page === 'budget') renderCharts();
+    if(page === 'qibla') renderQibla();
+    window.scrollTo(0,0);
+  };
 
-  // Budget edit
-  $('#editBudgetBtn').addEventListener('click', () => {
-    $('#budgetAmt').value = state.budget || '';
-    $('#budgetModal').classList.add('active');
-  });
-  $('#budgetCancel').addEventListener('click', () => $('#budgetModal').classList.remove('active'));
-  $('#budgetSave').addEventListener('click', () => {
-    const v = parseFloat($('#budgetAmt').value) || 0;
-    state.budget = v; save();
-    $('#budgetModal').classList.remove('active');
-    toast(t('budgetSaved'));
-    renderAll();
-  });
-  $('#budgetModal').addEventListener('click', (e) => { if (e.target.id === 'budgetModal') e.currentTarget.classList.remove('active'); });
-
-  // New goal
-  $('#newGoalBtn').addEventListener('click', () => {
-    $('#goalName').value = ''; $('#goalAmount').value = ''; $('#goalDeadline').value = '';
-    $('#goalModal').classList.add('active');
-  });
-  $('#goalCancel').addEventListener('click', () => $('#goalModal').classList.remove('active'));
-  $('#goalSave').addEventListener('click', () => {
-    const name = $('#goalName').value.trim();
-    const target = parseFloat($('#goalAmount').value);
-    const deadline = $('#goalDeadline').value;
-    if (!name || !target) { toast(t('fillAll'), true); return; }
-    state.goals.push({ id: Date.now(), name, target, saved: 0, deadline });
-    save();
-    $('#goalModal').classList.remove('active');
-    toast(t('goalSaved'));
-    renderAll();
-  });
-  $('#goalModal').addEventListener('click', (e) => { if (e.target.id === 'goalModal') e.currentTarget.classList.remove('active'); });
-
-  // Deposit
-  $('#depositAdd').addEventListener('click', () => doDeposit(1));
-  $('#depositWithdraw').addEventListener('click', () => doDeposit(-1));
-  $('#depositModal').addEventListener('click', (e) => { if (e.target.id === 'depositModal') e.currentTarget.classList.remove('active'); });
-
-  // New bill
-  $('#newBillBtn').addEventListener('click', () => {
-    $('#billName').value = ''; $('#billAmount').value = ''; $('#billDay').value = '';
-    $('#billModal').classList.add('active');
-  });
-  $('#billCancel').addEventListener('click', () => $('#billModal').classList.remove('active'));
-  $('#billSave').addEventListener('click', () => {
-    const name = $('#billName').value.trim();
-    const amount = parseFloat($('#billAmount').value);
-    const day = parseInt($('#billDay').value);
-    if (!name || !amount || !day) { toast(t('fillAll'), true); return; }
-    state.bills.push({ id: Date.now(), name, amount, day });
-    save();
-    $('#billModal').classList.remove('active');
-    toast(t('billSaved'));
-    renderAll();
-  });
-  $('#billModal').addEventListener('click', (e) => { if (e.target.id === 'billModal') e.currentTarget.classList.remove('active'); });
-
-  // Tasbih
-  $('#tasbihBtn').addEventListener('click', () => {
-    state.tasbih.count++;
-    if (state.tasbih.count > state.tasbih.target) state.tasbih.count = 1;
-    if (state.tasbih.count % state.tasbih.target === 0) {
-      toast('✓ ' + state.tasbih.target);
-      if (navigator.vibrate) navigator.vibrate(80);
-    }
-    $('#tasbihNum').textContent = state.tasbih.count;
-    save();
-  });
-  $('#tasbihReset').addEventListener('click', () => {
-    state.tasbih.count = 0; save();
-    $('#tasbihNum').textContent = 0;
-  });
-  $('#tasbihChange').addEventListener('click', () => {
-    const v = prompt('Target:', state.tasbih.target);
-    const n = parseInt(v);
-    if (n > 0) { state.tasbih.target = n; state.tasbih.count = 0; save(); renderQibla(); }
-  });
-
-  // Challenge tasks toggle
-  document.addEventListener('change', (e) => {
-    if (e.target.matches('[data-amal]')) {
-      const key = todayStr() + '_' + e.target.dataset.amal;
-      state.amal[key] = e.target.checked; save(); renderAmal();
-    }
-    if (e.target.matches('[data-task]')) {
-      const today = todayStr();
-      // handled by the task-specific rules - just re-render
-      renderChallenge();
-    }
-  });
-
-  // Transaction tap to delete
-  document.addEventListener('click', (e) => {
-    const item = e.target.closest('.txn-item');
-    if (item && !e.target.closest('a,button')) {
-      if (confirm(t('deleteConfirm'))) {
-        const id = Number(item.dataset.id);
-        state.txns = state.txns.filter(x => x.id !== id);
-        save(); renderAll();
-        toast(t('deleted'));
+  function renderAll() {
+    const today = new Date().toISOString().slice(0, 10);
+    const month = today.slice(0, 7);
+    let inc = 0, exp = 0, todayExp = 0, monthExp = 0;
+    
+    state.txns.forEach(t => {
+      if (t.type === 'income') inc += t.amount;
+      if (t.type === 'expense') {
+        exp += t.amount;
+        if (t.date === today) todayExp += t.amount;
+        if (t.date.startsWith(month)) monthExp += t.amount;
       }
-    }
-    // Goal deposit button
-    const dep = e.target.closest('[data-deposit]');
-    if (dep) {
-      depositGoalId = Number(dep.dataset.deposit);
-      $('#depositAmt').value = '';
-      $('#depositTitle').textContent = (state.lang === 'bn' ? 'জমা / উত্তোলন' : 'Deposit / Withdraw');
-      $('#depositModal').classList.add('active');
-    }
-  });
-
-  // Backup
-  $('#exportJsonBtn').addEventListener('click', () => {
-    const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = `barakah-backup-${todayStr()}.json`;
-    a.click(); URL.revokeObjectURL(url);
-  });
-  $('#importJsonBtn').addEventListener('click', () => $('#importFile').click());
-  $('#importFile').addEventListener('change', (e) => {
-    const f = e.target.files[0]; if (!f) return;
-    const r = new FileReader();
-    r.onload = (ev) => {
-      try {
-        const data = JSON.parse(ev.target.result);
-        state = { ...state, ...data };
-        save(); applyTheme(); applyLang(); renderAll();
-        toast(t('saved'));
-      } catch (err) { toast('Invalid file', true); }
-    };
-    r.readAsText(f);
-  });
-  $('#clearDataBtn').addEventListener('click', () => {
-    if (!confirm(t('deleteConfirm'))) return;
-    localStorage.removeItem(STORE_KEY);
-    localStorage.removeItem('barakah_users');
-    location.reload();
-  });
-
-  // Logout
-  $('#logoutBtn').addEventListener('click', () => {
-    state.user = null; save();
-    toast(t('loggedOut'));
-    showAuth();
-    $('#loginId').value = ''; $('#loginPass').value = '';
-  });
-
-  // Auto-lock (visual only)
-  let idleTimer;
-  function resetIdle() {
-    clearTimeout(idleTimer);
-    if (!$('#autoLockToggle').checked || !state.user) return;
-    idleTimer = setTimeout(() => {
-      toast(state.lang === 'bn' ? 'নিষ্ক্রিয়তার কারণে লক' : 'Locked due to inactivity');
-      state.user = null; save(); showAuth();
-    }, 5 * 60 * 1000);
-  }
-  ['click', 'touchstart', 'keydown', 'scroll'].forEach(ev => document.addEventListener(ev, resetIdle, { passive: true }));
-}
-
-function openAddModal() {
-  addState = { type: 'expense', category: 'food' };
-  $$('#typeToggle button').forEach(b => {
-    b.classList.toggle('active', b.dataset.type === 'expense');
-  });
-  $('#amtInput').value = '';
-  $('#noteInput').value = '';
-  $('#dateInput').value = todayStr();
-  renderCatGrid();
-  $('#addModal').classList.add('active');
-  setTimeout(() => $('#amtInput').focus(), 200);
-}
-
-function renderCatGrid() {
-  const list = addState.type === 'income' ? INCOME_CATS : CATEGORIES;
-  $('#catGrid').innerHTML = list.map(c => `
-    <button class="cat ${addState.category === c.id ? 'active' : ''}" data-cat="${c.id}">
-      <div class="ic" style="background:${c.color}25;color:${c.color}"><span style="font-size:18px">${c.icon}</span></div>
-      <span>${c[state.lang] || c.en}</span>
-    </button>
-  `).join('');
-  $$('#catGrid .cat').forEach(el => {
-    el.addEventListener('click', () => {
-      addState.category = el.dataset.cat;
-      renderCatGrid();
     });
-  });
-}
 
-function doDeposit(sign) {
-  const amt = parseFloat($('#depositAmt').value);
-  if (!amt || amt <= 0) { toast(t('fillAll'), true); return; }
-  const g = state.goals.find(x => x.id === depositGoalId);
-  if (!g) return;
-  if (sign < 0) {
-    if (g.saved < amt) { toast(t('insufficient'), true); return; }
-    g.saved -= amt;
-  } else {
-    g.saved += amt;
+    document.getElementById('balanceAmount').textContent = '৳ ' + (inc - exp).toLocaleString();
+    document.getElementById('todayExpense').textContent = '৳ ' + todayExp.toLocaleString();
+    document.getElementById('monthExpense').textContent = '৳ ' + monthExp.toLocaleString();
+    document.getElementById('homeIncome').textContent = '৳ ' + inc.toLocaleString();
+    document.getElementById('budgetLeft').textContent = '৳ ' + Math.max(0, state.budget - monthExp).toLocaleString();
+    
+    const recent = [...state.txns].reverse().slice(0, 5);
+    document.getElementById('recentTxns').innerHTML = recent.map(t => renderTxnHtml(t)).join('') || '<p class="text-muted text-center mt-16">কোনো লেনদেন নেই</p>';
+    document.getElementById('allTxns').innerHTML = [...state.txns].reverse().map(t => renderTxnHtml(t)).join('') || '<p class="text-muted text-center mt-16">কোনো লেনদেন নেই</p>';
+    
+    document.getElementById('tasbihNum').textContent = state.tasbih.count;
+    document.getElementById('tasbihTarget').textContent = state.tasbih.target;
   }
-  save();
-  $('#depositModal').classList.remove('active');
-  toast(t('depositAdded'));
-  renderAll();
-}
 
-function exportCsv() {
-  if (!state.txns.length) { toast(t('noTxn'), true); return; }
-  const rows = [['Date', 'Type', 'Category', 'Amount', 'Note']];
-  state.txns.forEach(x => {
-    const c = catInfo(x.category, x.type);
-    rows.push([x.date, x.type, c.en, x.amount, (x.note || '').replace(/,/g, ';')]);
-  });
-  const csv = rows.map(r => r.join(',')).join('\n');
-  const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = `barakah-txns-${todayStr()}.csv`;
-  a.click(); URL.revokeObjectURL(url);
-}
+  function renderTxnHtml(t) {
+    const cat = CATEGORIES.find(c => c.id === t.category) || CATEGORIES[3];
+    return `
+      <div class="txn-item" onclick="deleteTxn(${t.id})">
+        <div class="ic" style="background:var(--navy-700)">${cat.icon}</div>
+        <div class="meta"><div class="title">${cat.bn}</div><div class="sub">${t.date} ${t.note ? '· ' + t.note : ''}</div></div>
+        <div class="amt ${t.type}">${t.type === 'income' ? '+' : '-'}৳ ${t.amount}</div>
+      </div>
+    `;
+  }
 
-// ============================================================
-// INIT
-// ============================================================
-function init() {
-  load();
-  applyTheme();
-  applyLang();
-  bindEvents();
-  // hide splash after delay
-  setTimeout(() => {
-    if (state.user) showApp();
-    else showAuth();
-  }, 1800);
-  // fetch prayer times (even before login)
-  fetchPrayerTimes();
-  // midnight refresh of prayer times
-  setInterval(() => {
+  window.openAddModal = () => { document.getElementById('addModal').classList.add('active'); document.getElementById('amtInput').value = ''; document.getElementById('noteInput').value = ''; setType('expense'); };
+  window.closeModal = (id) => document.getElementById(id).classList.remove('active');
+  window.setType = (type) => {
+    addType = type;
+    document.getElementById('typeExpense').className = type === 'expense' ? 'btn btn-primary' : 'btn btn-outline';
+    document.getElementById('typeIncome').className = type === 'income' ? 'btn btn-primary' : 'btn btn-outline';
+    const cats = type === 'expense' ? CATEGORIES.filter(c => c.id !== 'salary') : CATEGORIES.filter(c => c.id === 'salary');
+    addCat = cats[0].id;
+    document.getElementById('catGrid').innerHTML = cats.map(c => `<div class="cat ${addCat === c.id ? 'active' : ''}" onclick="selectCat('${c.id}')"><div style="font-size:20px">${c.icon}</div><div>${c.bn}</div></div>`).join('');
+  };
+  window.selectCat = (id) => { addCat = id; setType(addType); };
+  
+  window.saveTxn = async () => {
+    const amt = parseFloat(document.getElementById('amtInput').value);
+    if (!amt || amt <= 0) return toast('সঠিক পরিমাণ দিন', true);
+    state.txns.push({ id: Date.now(), type: addType, amount: amt, category: addCat, note: document.getElementById('noteInput').value, date: new Date().toISOString().slice(0, 10) });
+    await saveData(); closeModal('addModal'); toast('সেভ হয়েছে'); renderAll();
+  };
+  
+  window.deleteTxn = async (id) => {
+    if(confirm('লেনদেনটি মুছে ফেলবেন?')) {
+      state.txns = state.txns.filter(t => t.id !== id);
+      await saveData(); renderAll(); toast('মুছে ফেলা হয়েছে');
+    }
+  };
+
+  window.openBudgetModal = () => { document.getElementById('budgetAmtInput').value = state.budget || ''; document.getElementById('budgetModal').classList.add('active'); };
+  window.saveBudget = async () => {
+    state.budget = parseFloat(document.getElementById('budgetAmtInput').value) || 0;
+    await saveData(); closeModal('budgetModal'); renderAll(); renderCharts(); toast('বাজেট সেভ হয়েছে');
+  };
+
+  function renderCharts() {
+    const month = new Date().toISOString().slice(0, 7);
+    const monthExp = state.txns.filter(x => x.type === 'expense' && x.date.startsWith(month)).reduce((a, x) => a + x.amount, 0);
+    const pct = state.budget > 0 ? Math.min(100, (monthExp / state.budget) * 100) : 0;
+    
+    document.getElementById('budgetUsed').textContent = '৳ ' + monthExp.toLocaleString();
+    document.getElementById('budgetTotal').textContent = '৳ ' + state.budget.toLocaleString();
+    document.getElementById('budgetBar').style.width = pct + '%';
+
+    const catTotals = {};
+    state.txns.filter(x => x.type === 'expense' && x.date.startsWith(month)).forEach(x => { catTotals[x.category] = (catTotals[x.category] || 0) + x.amount; });
+    
+    if (catChartInst) catChartInst.destroy();
+    catChartInst = new Chart(document.getElementById('catChart'), {
+      type: 'doughnut',
+      data: {
+        labels: Object.keys(catTotals).map(k => CATEGORIES.find(c=>c.id===k)?.bn || k),
+        datasets: [{ data: Object.values(catTotals), backgroundColor: ['#10b981', '#3b82f6', '#ef4444', '#f59e0b', '#8b5cf6'], borderWidth: 0 }]
+      },
+      options: { plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font:{size:11} } } } }
+    });
+  }
+
+  async function fetchPrayerTimes() {
+    try {
+      const res = await fetch(`https://api.aladhan.com/v1/timingsByCity?country=Bangladesh&city=Dhaka&method=1`);
+      const data = await res.json();
+      prayerData = data.data.timings;
+      renderPrayer();
+    } catch(e) { prayerData = { Fajr: '05:00', Sunrise: '06:20', Dhuhr: '12:15', Asr: '15:45', Maghrib: '18:20', Isha: '19:40' }; renderPrayer(); }
+  }
+
+  const PRAYERS = [ {k:'Fajr', b:'ফজর'}, {k:'Dhuhr', b:'যোহর'}, {k:'Asr', b:'আসর'}, {k:'Maghrib', b:'মাগরিব'}, {k:'Isha', b:'ইশা'} ];
+  
+  function renderPrayer() {
+    if(!prayerData) return;
     const now = new Date();
-    if (now.getHours() === 0 && now.getMinutes() === 0) fetchPrayerTimes();
-  }, 60000);
-}
+    let next = null;
+    for (const p of PRAYERS) {
+      const [h, m] = prayerData[p.k].split(':').map(Number);
+      const dt = new Date(); dt.setHours(h, m, 0, 0);
+      if (dt > now) { next = { ...p, time: prayerData[p.k], dt }; break; }
+    }
+    if (!next) { const [h, m] = prayerData.Fajr.split(':').map(Number); const dt = new Date(); dt.setDate(dt.getDate()+1); dt.setHours(h,m,0,0); next = { k:'Fajr', b:'ফজর', time:prayerData.Fajr, dt }; }
 
-document.addEventListener('DOMContentLoaded', init);
+    document.getElementById('nextPrayerName').textContent = next.b;
+    document.getElementById('nextPrayerTime').textContent = next.time;
+    document.getElementById('pHeroName').textContent = next.b;
+    document.getElementById('pHeroTime').textContent = next.time;
+    
+    document.getElementById('prayerList').innerHTML = PRAYERS.map(p => `<div class="prayer-row ${next.k === p.k ? 'next' : ''}"><div style="font-weight:600">${p.b}</div><div style="color:var(--emerald-light); font-weight:600;">${prayerData[p.k]}</div></div>`).join('');
+    
+    if (prayerTimer) clearInterval(prayerTimer);
+    prayerTimer = setInterval(() => {
+      const diff = next.dt - new Date();
+      if (diff <= 0) { clearInterval(prayerTimer); fetchPrayerTimes(); return; }
+      const h = Math.floor(diff / 3600000), m = Math.floor((diff % 3600000) / 60000), s = Math.floor((diff % 60000) / 1000);
+      const str = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+      document.getElementById('nextPrayerCd').textContent = str;
+      document.getElementById('pHeroCd').textContent = str;
+    }, 1000);
+  }
+
+  async function renderQibla() {
+    if (!document.querySelector('.compass').dataset.loaded) {
+      try {
+        const res = await fetch(`https://api.aladhan.com/v1/qibla/23.8103/90.4125`);
+        const data = await res.json();
+        document.getElementById('needle').style.transform = `translateX(-50%) rotate(${data.data.direction}deg)`;
+        document.getElementById('qiblaInfo').textContent = `কিবলার দিক: ${data.data.direction.toFixed(1)}° (উত্তর থেকে)`;
+        document.querySelector('.compass').dataset.loaded = '1';
+      } catch(e) { document.getElementById('qiblaInfo').textContent = 'লোড করা যায়নি'; }
+    }
+  }
+
+  window.incrementTasbih = async () => {
+    state.tasbih.count++;
+    if(state.tasbih.count > state.tasbih.target) state.tasbih.count = 1;
+    document.getElementById('tasbihNum').textContent = state.tasbih.count;
+    if(navigator.vibrate) navigator.vibrate(50);
+    await saveData();
+  };
+  window.resetTasbih = async () => { state.tasbih.count = 0; document.getElementById('tasbihNum').textContent = 0; await saveData(); };
+
+  window.toggleTheme = () => {
+    state.theme = state.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', state.theme);
+    document.getElementById('themeBtn').textContent = state.theme === 'dark' ? '🌙' : '☀️';
+    saveData();
+  };
+
+  window.enableNotifications = async () => {
+    try {
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        const token = await getToken(messaging, { vapidKey: VAPID_KEY });
+        if (token) {
+          await updateDoc(doc(db, "users", currentUser.uid), { fcmToken: token });
+          toast('নোটিফিকেশন চালু হয়েছে!');
+        } else { toast('টোকেন পাওয়া যায়নি', true); }
+      } else { toast('অনুমতি দেওয়া হয়নি', true); }
+    } catch (err) { toast('নোটিফিকেশন চালু করা যায়নি', true); }
+  };
+
+  onMessage(messaging, (payload) => { toast(payload.notification.title + ": " + payload.notification.body); });
+  
+  window.toast = (msg, isError = false) => {
+    const el = document.getElementById('toast'); el.textContent = msg;
+    el.style.background = isError ? 'var(--danger)' : 'var(--emerald)';
+    el.classList.add('show'); setTimeout(() => el.classList.remove('show'), 2500);
+  };
 </script>
 </body>
 </html>
